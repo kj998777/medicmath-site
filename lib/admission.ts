@@ -2,6 +2,7 @@
 
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
+import { notifyNewAdmission } from "@/lib/notify";
 
 export type AdmissionState = {
   ok: boolean;
@@ -62,6 +63,9 @@ export async function submitAdmission(_prev: AdmissionState, fd: FormData): Prom
     console.error("[admission] insert 실패:", error.message);
     return { ok: false, message: "신청 중 문제가 생겼습니다. 잠시 후 다시 시도하거나 전화로 문의해 주세요." };
   }
+
+  // 원장님께 문자 알림 (설정돼 있을 때만, 실패해도 신청은 그대로 접수)
+  await notifyNewAdmission({ studentName, school, phone });
 
   return { ok: true, message: "신청이 접수되었습니다. 확인 후 연락드리겠습니다." };
 }
