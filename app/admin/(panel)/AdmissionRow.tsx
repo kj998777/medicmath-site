@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { updateAdmission } from "../actions";
+import { updateAdmission, deleteAdmission } from "../actions";
 
 export type Admission = {
   id: string;
@@ -40,7 +40,11 @@ export default function AdmissionRow({ a }: { a: Admission }) {
   const [memo, setMemo] = useState(a.memo ?? "");
   const [msg, setMsg] = useState("");
   const [pending, start] = useTransition();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const tel = a.phone.replace(/[^\d+]/g, "");
+
+  if (deleted) return null;
 
   return (
     <li className="rounded-lg border border-line bg-white">
@@ -113,6 +117,50 @@ export default function AdmissionRow({ a }: { a: Admission }) {
               {msg}
             </p>
           )}
+
+          <div className="flex flex-wrap items-center justify-end gap-3 border-t border-line pt-4">
+            {confirmDelete ? (
+              <>
+                <span className="text-sm font-semibold text-brand">이 신청을 영구 삭제할까요? 되돌릴 수 없어요.</span>
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() => setConfirmDelete(false)}
+                  className="h-10 rounded border border-line px-4 text-sm font-semibold hover:border-ink disabled:opacity-60"
+                >
+                  취소
+                </button>
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={() =>
+                    start(async () => {
+                      const r = await deleteAdmission(a.id);
+                      if (r.ok) setDeleted(true);
+                      else {
+                        setMsg(r.message);
+                        setConfirmDelete(false);
+                      }
+                    })
+                  }
+                  className="h-10 rounded bg-brand px-4 text-sm font-semibold text-white disabled:opacity-60"
+                >
+                  {pending ? "삭제 중…" : "삭제"}
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setMsg("");
+                  setConfirmDelete(true);
+                }}
+                className="h-10 rounded px-3 text-sm text-muted underline hover:text-brand"
+              >
+                이 신청 삭제
+              </button>
+            )}
+          </div>
         </div>
       )}
     </li>
