@@ -4,7 +4,8 @@
 
 export type Rule = { title: string; body: string };
 export type Step = { title: string; body: string };
-export type Program = { badge: string; highlight: boolean; title: string; body: string; schedule: string };
+// enrolled/capacity: 현재 수강 인원 / 정원. capacity가 0이면 사이트에 인원 표시를 하지 않는다.
+export type Program = { badge: string; highlight: boolean; title: string; body: string; schedule: string; enrolled: number; capacity: number };
 export type Teacher = { name: string; grades: string; career: string; photo: string };
 export type Review = { quote: string; who: string };
 
@@ -49,9 +50,9 @@ export const defaultContent: SiteContent = {
     { title: "등록 · 수업 시작", body: "[첫 달 적응 기간 등 안내]" },
   ],
   programs: [
-    { badge: "중등부", highlight: false, title: "[과정명 — 예: 내신 + 선행]", body: "[대상 학년, 수업 목표, 교재·진도]", schedule: "주 [0]회 · [000]분" },
-    { badge: "고1 · 고2", highlight: false, title: "[과정명 — 예: 학교별 내신 완성]", body: "[대상 학교, 수업 목표, 시험 대비 방식]", schedule: "주 [0]회 · [000]분" },
-    { badge: "고3 · 수능", highlight: true, title: "[과정명 — 예: 수능 실전반]", body: "[선택과목, 모의고사 운영, 목표 등급]", schedule: "주 [0]회 · [000]분" },
+    { badge: "중등부", highlight: false, title: "[과정명 — 예: 내신 + 선행]", body: "[대상 학년, 수업 목표, 교재·진도]", schedule: "주 [0]회 · [000]분", enrolled: 0, capacity: 0 },
+    { badge: "고1 · 고2", highlight: false, title: "[과정명 — 예: 학교별 내신 완성]", body: "[대상 학교, 수업 목표, 시험 대비 방식]", schedule: "주 [0]회 · [000]분", enrolled: 0, capacity: 0 },
+    { badge: "고3 · 수능", highlight: true, title: "[과정명 — 예: 수능 실전반]", body: "[선택과목, 모의고사 운영, 목표 등급]", schedule: "주 [0]회 · [000]분", enrolled: 0, capacity: 0 },
   ],
   teachers: [
     { name: "[이름] 원장", grades: "[담당 학년]", career: "[학력·주요 약력]", photo: "" },

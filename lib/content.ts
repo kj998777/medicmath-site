@@ -14,6 +14,11 @@ function str(v: unknown, fallback: string, max: number): string {
   return v.trim().slice(0, max);
 }
 
+function count(v: unknown): number {
+  const n = typeof v === "number" ? v : typeof v === "string" ? Number(v) : NaN;
+  return Number.isFinite(n) ? Math.min(999, Math.max(0, Math.floor(n))) : 0;
+}
+
 function httpUrl(v: unknown, max = 500): string {
   if (typeof v !== "string") return "";
   const s = v.trim().slice(0, max);
@@ -76,6 +81,8 @@ export function sanitizeContent(raw: unknown): SiteContent {
       title: str(x.title, "", MAX.short),
       body: str(x.body, "", MAX.long),
       schedule: str(x.schedule, "", MAX.short),
+      enrolled: count(x.enrolled),
+      capacity: count(x.capacity),
     })),
     teachers: list(r.teachers, LIMITS.teachers, d.teachers, (x) => ({
       name: str(x.name, "", MAX.short),

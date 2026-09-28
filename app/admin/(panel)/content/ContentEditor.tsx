@@ -261,6 +261,38 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
                 빨간 배지로 강조
               </label>
             </div>
+            <div className="flex flex-wrap items-end gap-3 rounded bg-paper p-3">
+              <Field label="현재 수강 인원">
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={999}
+                  className={inputCls + " w-28"}
+                  value={p.enrolled}
+                  onChange={(e) => setItem("programs", i, { enrolled: Math.max(0, Math.min(999, Number(e.target.value) || 0)) })}
+                />
+              </Field>
+              <span className="pb-2 text-2xl font-semibold text-muted">/</span>
+              <Field label="정원">
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  min={0}
+                  max={999}
+                  className={inputCls + " w-28"}
+                  value={p.capacity}
+                  onChange={(e) => setItem("programs", i, { capacity: Math.max(0, Math.min(999, Number(e.target.value) || 0)) })}
+                />
+              </Field>
+              <p className="pb-2 text-sm text-muted">
+                {p.capacity > 0
+                  ? p.enrolled >= p.capacity
+                    ? "사이트에 “마감”으로 표시돼요."
+                    : `사이트에 (${p.enrolled}/${p.capacity})로 크게 표시돼요.`
+                  : "정원을 0으로 두면 인원 표시를 숨겨요."}
+              </p>
+            </div>
             <Field label="설명">
               <textarea className={areaCls} value={p.body} onChange={(e) => setItem("programs", i, { body: e.target.value })} />
             </Field>
@@ -270,7 +302,7 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
           <button
             type="button"
             className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
-            onClick={() => set("programs", [...c.programs, { badge: "", highlight: false, title: "", body: "", schedule: "" }])}
+            onClick={() => set("programs", [...c.programs, { badge: "", highlight: false, title: "", body: "", schedule: "", enrolled: 0, capacity: 0 }])}
           >
             + 과정 추가
           </button>

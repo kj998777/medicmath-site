@@ -32,6 +32,26 @@ function ClockIcon() {
 
 const wrap = "mx-auto max-w-page px-5 md:px-24";
 
+// 수업 카드 오른쪽 위의 수강 인원 표시 (예: 3/5). 정원이 차면 "마감".
+function Seats({ enrolled, capacity }: { enrolled: number; capacity: number }) {
+  const full = enrolled >= capacity;
+  const left = capacity - enrolled;
+  return (
+    <div className="-mt-1 flex flex-col items-end leading-none" aria-label={full ? "정원 마감" : `정원 ${capacity}명 중 ${enrolled}명 수강 중`}>
+      {full ? (
+        <span className="rounded bg-brand px-3 py-2 font-serif text-[26px] font-black text-white md:text-[32px]">마감</span>
+      ) : (
+        <span className="font-serif font-black tracking-[-1px] text-ink">
+          <span className="text-[40px] text-brand md:text-[52px]">{enrolled}</span>
+          <span className="mx-0.5 text-[28px] text-[#B3A99C] md:text-[36px]">/</span>
+          <span className="text-[28px] md:text-[36px]">{capacity}</span>
+        </span>
+      )}
+      <span className="mt-1.5 text-xs font-semibold text-muted md:text-[13px]">{full ? `정원 ${capacity}명` : `잔여 ${left}석`}</span>
+    </div>
+  );
+}
+
 export default async function Home() {
   const site = await getContent();
   const telHref = site.phone ? `tel:${site.phone.replace(/[^\d+]/g, "")}` : "";
@@ -163,9 +183,12 @@ export default async function Home() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
             {site.programs.map((p, i) => (
               <article key={i} className="flex flex-col gap-3 rounded-md border border-line bg-white p-6 md:min-h-[300px] md:gap-4 md:rounded-lg md:p-9">
-                <span className={"self-start rounded-sm px-2.5 py-[5px] text-[13px] font-semibold text-white md:px-3 md:py-1.5 md:text-sm " + (p.highlight ? "bg-brand" : "bg-ink")}>
-                  {p.badge}
-                </span>
+                <div className="flex items-start justify-between gap-3">
+                  <span className={"self-start rounded-sm px-2.5 py-[5px] text-[13px] font-semibold text-white md:px-3 md:py-1.5 md:text-sm " + (p.highlight ? "bg-brand" : "bg-ink")}>
+                    {p.badge}
+                  </span>
+                  {p.capacity > 0 && <Seats enrolled={p.enrolled} capacity={p.capacity} />}
+                </div>
                 <h3 className="text-xl font-semibold md:text-[26px]">{p.title}</h3>
                 <p className="flex-1 text-sm leading-[1.7] text-muted md:text-base">{p.body}</p>
                 <div className="flex items-center justify-between border-t border-line pt-3 text-sm text-muted md:pt-4 md:text-[15px]">
