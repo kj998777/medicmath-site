@@ -26,7 +26,7 @@ function Submit() {
   );
 }
 
-export default function AdmissionForm() {
+export default function AdmissionForm({ privacyRetention }: { privacyRetention: string }) {
   const [state, action] = useFormState(submitAdmission, initial);
 
   if (state.ok) {
@@ -83,7 +83,7 @@ export default function AdmissionForm() {
       <label className="flex items-start gap-3 text-sm text-muted">
         <input name="consent" type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-brand" />
         <span>
-          입학 상담을 위해 학생 이름, 학교·학년, 연락처, 성적, 신청 사유를 수집하며, 상담 종료 후 [보관 기간] 뒤 파기합니다. 이에
+          입학 상담을 위해 학생 이름, 학교·학년, 연락처, 성적, 신청 사유를 수집하며, 상담 종료 후 {privacyRetention} 뒤 파기합니다. 이에
           동의합니다. (필수)
           <br />
           <Err msg={e.consent} />

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import AdmissionForm from "@/components/AdmissionForm";
-import { site, rules, admissionSteps, programs, teachers, reviews } from "@/lib/site";
+import { getContent } from "@/lib/content";
 
-const telHref = site.phone ? `tel:${site.phone.replace(/[^\d+]/g, "")}` : "";
+// 관리자 화면에서 저장하면 즉시 갱신(revalidatePath)되고, 그 외에도 5분마다 새로 읽는다.
+export const revalidate = 300;
 
 function PinIcon() {
   return (
@@ -31,7 +32,15 @@ function ClockIcon() {
 
 const wrap = "mx-auto max-w-page px-5 md:px-24";
 
-export default function Home() {
+export default async function Home() {
+  const site = await getContent();
+  const telHref = site.phone ? `tel:${site.phone.replace(/[^\d+]/g, "")}` : "";
+  const links = [
+    { label: "블로그", href: site.links.blog },
+    { label: "인스타그램", href: site.links.instagram },
+    { label: "카카오톡 채널", href: site.links.kakao },
+  ];
+
   return (
     <div id="top">
       <Header />
@@ -54,9 +63,14 @@ export default function Home() {
                 메딕수학은 성적을 올리고 <span className="text-[#8E857A] line-through">싶은</span> 학생이 아니라,
                 <br className="hidden md:inline" /> 성적을 올리기로 <b className="font-semibold text-white">결심한</b> 학생을 가르칩니다.
               </p>
-              <div className="placeholder-box h-[220px] rounded-md border-[#5A534A] bg-[#2A2722] text-[#9A9186] md:h-[360px] lg:hidden">
-                [자습실 · 수업 사진]
-              </div>
+              {site.heroPhoto ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={site.heroPhoto} alt="메딕수학 자습실·수업 모습" className="h-[220px] w-full rounded-md object-cover md:h-[360px] lg:hidden" />
+              ) : (
+                <div className="placeholder-box h-[220px] rounded-md border-[#5A534A] bg-[#2A2722] text-[#9A9186] md:h-[360px] lg:hidden">
+                  [자습실 · 수업 사진]
+                </div>
+              )}
               <div className="flex flex-col gap-2.5 md:mt-2 md:flex-row md:gap-3">
                 <a href="#consult" className="flex h-[54px] items-center justify-center rounded bg-brand px-[34px] font-semibold text-white hover:bg-brand-dark md:h-auto md:py-5 md:text-[17px]">
                   입학 테스트 신청
@@ -66,9 +80,14 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <div className="placeholder-box hidden w-[500px] shrink-0 rounded-lg border-[#5A534A] bg-[#2A2722] text-[#9A9186] lg:flex lg:min-h-[528px]">
-              [자습실 · 수업 사진]
-            </div>
+            {site.heroPhoto ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={site.heroPhoto} alt="메딕수학 자습실·수업 모습" className="hidden w-[500px] shrink-0 rounded-lg object-cover lg:block lg:min-h-[528px]" />
+            ) : (
+              <div className="placeholder-box hidden w-[500px] shrink-0 rounded-lg border-[#5A534A] bg-[#2A2722] text-[#9A9186] lg:flex lg:min-h-[528px]">
+                [자습실 · 수업 사진]
+              </div>
+            )}
           </div>
         </section>
 
@@ -78,7 +97,7 @@ export default function Home() {
             <div className="flex flex-col gap-2.5 md:gap-3.5">
               <p className="eyebrow">OUR RULES</p>
               <h2 className="section-title">
-                메딕수학의<br className="md:hidden" /> 세 가지 원칙
+                메딕수학의<br className="md:hidden" /> 원칙
               </h2>
             </div>
             <p className="text-[15px] leading-[1.7] text-muted md:max-w-[440px] md:text-[17px]">
@@ -86,9 +105,9 @@ export default function Home() {
             </p>
           </div>
           <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-8">
-            {rules.map((r) => (
-              <div key={r.no} className="flex gap-4 border-t-2 border-ink pt-[18px] md:flex-col md:gap-3.5 md:border-t-[3px] md:pt-7">
-                <span className="font-serif text-[30px] font-black leading-none text-brand md:text-[44px]">{r.no}</span>
+            {site.rules.map((r, i) => (
+              <div key={i} className="flex gap-4 border-t-2 border-ink pt-[18px] md:flex-col md:gap-3.5 md:border-t-[3px] md:pt-7">
+                <span className="font-serif text-[30px] font-black leading-none text-brand md:text-[44px]">{String(i + 1).padStart(2, "0")}</span>
                 <div className="flex flex-col gap-1.5 md:gap-3.5">
                   <h3 className="text-[19px] font-semibold md:text-[25px]">{r.title}</h3>
                   <p className="text-sm leading-[1.7] text-muted md:text-base md:leading-[1.75]">{r.body}</p>
@@ -111,18 +130,18 @@ export default function Home() {
               </p>
             </div>
             <ol className="grid flex-1 grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-5">
-              {admissionSteps.map((s, i) => {
-                const last = i === admissionSteps.length - 1;
+              {site.steps.map((s, i) => {
+                const last = i === site.steps.length - 1;
                 return (
                   <li
-                    key={s.step}
+                    key={i}
                     className={
                       "flex gap-4 rounded-md p-5 md:flex-col md:gap-2.5 md:rounded-lg md:p-8 " +
                       (last ? "bg-ink text-paper" : "bg-white")
                     }
                   >
                     <span className={"w-[52px] shrink-0 pt-[3px] text-[13px] font-semibold md:w-auto md:pt-0 md:text-sm " + (last ? "text-brand-light" : "text-brand")}>
-                      {s.step}
+                      STEP {i + 1}
                     </span>
                     <div className="flex flex-col gap-1 md:gap-2.5">
                       <h3 className="text-lg font-semibold md:text-[22px]">{s.title}</h3>
@@ -142,8 +161,8 @@ export default function Home() {
             <h2 className="section-title">수업 안내</h2>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-            {programs.map((p) => (
-              <article key={p.badge} className="flex flex-col gap-3 rounded-md border border-line bg-white p-6 md:min-h-[300px] md:gap-4 md:rounded-lg md:p-9">
+            {site.programs.map((p, i) => (
+              <article key={i} className="flex flex-col gap-3 rounded-md border border-line bg-white p-6 md:min-h-[300px] md:gap-4 md:rounded-lg md:p-9">
                 <span className={"self-start rounded-sm px-2.5 py-[5px] text-[13px] font-semibold text-white md:px-3 md:py-1.5 md:text-sm " + (p.highlight ? "bg-brand" : "bg-ink")}>
                   {p.badge}
                 </span>
@@ -167,10 +186,11 @@ export default function Home() {
             <h2 className="section-title">강사진</h2>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-            {teachers.map((t, i) => (
+            {site.teachers.map((t, i) => (
               <div key={i} className="flex gap-4 rounded-md border border-line bg-white p-4 md:gap-5 md:rounded-lg md:p-6">
                 {t.photo ? (
-                  <Image src={t.photo} alt={t.name} width={140} height={180} className="h-[110px] w-[88px] shrink-0 rounded object-cover md:h-[180px] md:w-[140px]" />
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={t.photo} alt={t.name} className="h-[110px] w-[88px] shrink-0 rounded object-cover md:h-[180px] md:w-[140px]" />
                 ) : (
                   <div className="placeholder-box h-[110px] w-[88px] shrink-0 rounded border-[#BDB4A7] bg-sand text-[13px] text-[#6E665C] md:h-[180px] md:w-[140px] md:text-sm">
                     [사진]
@@ -196,7 +216,7 @@ export default function Home() {
               버텨낸 학생들의<br className="md:hidden" /> 이야기
             </h2>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {reviews.map((r, i) => (
+              {site.reviews.map((r, i) => (
                 <figure key={i} className="flex flex-col gap-2.5 border-t border-[#5A534A] pt-[18px] md:min-h-[160px] md:gap-[18px] md:pt-6">
                   <blockquote className="flex-1 text-base leading-[1.7] md:text-lg md:leading-[1.75]">{r.quote}</blockquote>
                   <figcaption className="text-[13px] text-[#B3A99C] md:text-sm">{r.who}</figcaption>
@@ -213,7 +233,7 @@ export default function Home() {
             <p className="text-[15px] leading-[1.7] text-muted md:text-base">
               신청은 학생 본인의 결심에서 시작됩니다. 남겨 주시면 {site.replyWithin} 안에 연락드립니다.
             </p>
-            <AdmissionForm />
+            <AdmissionForm privacyRetention={site.privacyRetention} />
           </div>
 
           <div id="location" className="flex flex-col gap-4 pt-6 lg:w-[480px] lg:shrink-0 md:gap-5 md:pt-0">
@@ -224,7 +244,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="placeholder-box h-[220px] rounded-md border-[#BDB4A7] bg-sand text-[#6E665C] hover:text-ink md:h-[320px] lg:h-auto lg:min-h-[360px] lg:flex-1 md:rounded-lg"
             >
-              지도에서 보기 — 제주시 중앙로 312
+              지도에서 보기 — {site.address}
             </a>
             <div className="flex flex-col gap-2.5 text-[15px] leading-[1.6] md:gap-3 md:text-base">
               <p className="hidden text-xl font-semibold md:block">오시는 길</p>
@@ -251,7 +271,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex gap-5 md:gap-6">
-            {site.links.map((l) =>
+            {links.map((l) =>
               l.href ? (
                 <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="hover:text-brand">
                   {l.label}

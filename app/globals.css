@@ -8,6 +8,13 @@ html {
   scroll-padding-top: 72px;
 }
 
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
+
 body {
   @apply bg-paper text-ink font-sans antialiased;
   word-break: keep-all;
