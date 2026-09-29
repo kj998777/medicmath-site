@@ -55,6 +55,8 @@ function Seats({ enrolled, capacity }: { enrolled: number; capacity: number }) {
 export default async function Home() {
   const site = await getContent();
   const telHref = site.phone ? `tel:${site.phone.replace(/[^\d+]/g, "")}` : "";
+  // 지도 검색용 주소: "…중앙로 312, 2층"에서 층수 부분은 빼야 위치를 정확히 찾는다.
+  const mapQuery = site.address.split(",")[0].trim() || site.address;
   const links = [
     { label: "블로그", href: site.links.blog },
     { label: "인스타그램", href: site.links.instagram },
@@ -261,14 +263,35 @@ export default async function Home() {
 
           <div id="location" className="flex flex-col gap-4 pt-6 lg:w-[480px] lg:shrink-0 md:gap-5 md:pt-0">
             <h2 className="text-xl font-semibold md:hidden">오시는 길</h2>
-            <a
-              href={site.mapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="placeholder-box h-[220px] rounded-md border-[#BDB4A7] bg-sand text-[#6E665C] hover:text-ink md:h-[320px] lg:h-auto lg:min-h-[360px] lg:flex-1 md:rounded-lg"
-            >
-              지도에서 보기 — {site.address}
-            </a>
+            {/* 지도: 키 없이 쓰는 구글 지도 임베드. 주소(층수 제외)로 위치를 찾으므로 관리자 화면에서 주소를 바꾸면 지도도 따라 바뀐다. */}
+            <div className="overflow-hidden rounded-md border border-line bg-sand md:rounded-lg lg:flex-1">
+              <iframe
+                title={`메딕수학 위치 지도 — ${site.address}`}
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&hl=ko&z=17&output=embed`}
+                className="block h-[260px] w-full border-0 md:h-[320px] lg:h-full lg:min-h-[360px]"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-2.5">
+              <a
+                href={site.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 items-center justify-center rounded border border-ink text-sm font-semibold hover:bg-sand"
+              >
+                네이버 지도로 길찾기
+              </a>
+              <a
+                href={`https://map.kakao.com/link/search/${encodeURIComponent(mapQuery)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 items-center justify-center rounded border border-ink text-sm font-semibold hover:bg-sand"
+              >
+                카카오맵으로 길찾기
+              </a>
+            </div>
             <div className="flex flex-col gap-2.5 text-[15px] leading-[1.6] md:gap-3 md:text-base">
               <p className="hidden text-xl font-semibold md:block">오시는 길</p>
               <p className="flex gap-2.5"><PinIcon />{site.address}</p>
