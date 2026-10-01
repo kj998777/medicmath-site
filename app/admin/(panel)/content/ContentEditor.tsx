@@ -193,8 +193,10 @@ function move<T>(arr: T[], i: number, d: number): T[] {
   return next;
 }
 
-export default function ContentEditor({ initial }: { initial: SiteContent }) {
+export default function ContentEditor({ initial, loadedAt }: { initial: SiteContent; loadedAt: string | null }) {
   const [c, setC] = useState<SiteContent>(initial);
+  // 이 화면을 연 뒤 다른 곳(다른 탭·기기, SQL)에서 바뀌었으면 덮어쓰지 않도록, 불러온 시각을 같이 보낸다.
+  const [baseAt, setBaseAt] = useState<string | null>(loadedAt);
   const [dirty, setDirty] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
@@ -515,9 +517,12 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
             disabled={pending || !dirty}
             onClick={() =>
               start(async () => {
-                const r = await saveContent(c);
+                const r = await saveContent(c, baseAt);
                 setMsg({ ok: r.ok, text: r.message });
-                if (r.ok) setDirty(false);
+                if (r.ok) {
+                  setDirty(false);
+                  if (r.savedAt) setBaseAt(r.savedAt);
+                }
               })
             }
             className="h-12 rounded bg-brand px-8 font-semibold text-white disabled:opacity-50"

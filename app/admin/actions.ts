@@ -46,7 +46,7 @@ export async function deleteAdmission(id: string): Promise<ActionResult> {
   return { ok: true, message: "삭제했습니다." };
 }
 
-export async function saveContent(raw: unknown): Promise<ActionResult> {
+export async function saveContent(raw: unknown, baseAt: string | null = null): Promise<ActionResult & { savedAt?: string }> {
   let staff;
   try {
     staff = await requireStaff();
@@ -55,13 +55,22 @@ export async function saveContent(raw: unknown): Promise<ActionResult> {
   }
   const data = sanitizeContent(raw);
   const supabase = createServerSupabase();
+  // 이 화면을 연 뒤 다른 곳에서 저장됐으면(다른 탭·기기, Claude의 SQL 수정) 그 내용을 덮어쓰지 않는다.
+  const { data: cur } = await supabase.from("site_content").select("updated_at").eq("id", "main").maybeSingle();
+  if (cur?.updated_at && (!baseAt || new Date(cur.updated_at).getTime() > new Date(baseAt).getTime() + 1)) {
+    return {
+      ok: false,
+      message: "이 화면을 연 뒤 다른 곳에서 내용이 바뀌었습니다. 덮어쓰지 않았어요 — 고친 내용을 메모해 두고 새로고침한 뒤 다시 저장해 주세요.",
+    };
+  }
+  const savedAt = new Date().toISOString();
   const { error } = await supabase
     .from("site_content")
-    .upsert({ id: "main", data, updated_at: new Date().toISOString(), updated_by: staff.email });
+    .upsert({ id: "main", data, updated_at: savedAt, updated_by: staff.email });
   if (error) return { ok: false, message: "저장하지 못했습니다: " + error.message };
   revalidatePath("/");
   revalidatePath("/admin/content");
-  return { ok: true, message: "저장했습니다. 사이트에 바로 반영됩니다." };
+  return { ok: true, message: "저장했습니다. 사이트에 바로 반영됩니다.", savedAt };
 }
 
 export async function signOut(): Promise<void> {

@@ -26,7 +26,7 @@ export default async function ContentPage() {
           저장된 내용을 불러오지 못했습니다. 사이트 내용용 표(0015 SQL)가 실행됐는지 확인해 주세요. ({error.message})
         </p>
       )}
-      <ContentEditor initial={content} />
+      <ContentEditor initial={content} loadedAt={data?.updated_at ?? null} />
     </div>
   );
 }
