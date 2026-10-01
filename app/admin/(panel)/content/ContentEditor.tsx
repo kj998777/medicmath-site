@@ -547,6 +547,35 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
         )}
       </Section>
 
+      <Section title="자주 묻는 질문">
+        <p className="-mt-2 text-sm text-muted">입학 안내 아래에 보여요. 누르면 답이 펼쳐져요.</p>
+        {c.faqs.map((f, i) => (
+          <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold">질문 {i + 1}</span>
+              <ListControls
+                canUp={i > 0}
+                canDown={i < c.faqs.length - 1}
+                onUp={() => set("faqs", move(c.faqs, i, -1))}
+                onDown={() => set("faqs", move(c.faqs, i, 1))}
+                onRemove={() => set("faqs", c.faqs.filter((_, j) => j !== i))}
+              />
+            </div>
+            <Field label="질문">
+              <input className={inputCls} value={f.q} onChange={(e) => set("faqs", c.faqs.map((x, j) => (j === i ? { ...x, q: e.target.value } : x)))} />
+            </Field>
+            <Field label="답">
+              <textarea className={areaCls} value={f.a} onChange={(e) => set("faqs", c.faqs.map((x, j) => (j === i ? { ...x, a: e.target.value } : x)))} />
+            </Field>
+          </div>
+        ))}
+        {c.faqs.length < 12 && (
+          <button type="button" className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm" onClick={() => set("faqs", [...c.faqs, { q: "", a: "" }])}>
+            + 질문 추가
+          </button>
+        )}
+      </Section>
+
       <Section title="하단 정보 · 외부 링크">
         <div className="grid gap-4 md:grid-cols-3">
           <Field label="대표자">

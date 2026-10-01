@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import SiteAnalytics from "@/components/SiteAnalytics";
 
 // 대표 주소(2026-10-01 구매). medicmath.com·medicmath-site.vercel.app은 이 주소로 넘어온다.
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.medicmath.com";
@@ -37,7 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SiteAnalytics />
+      </body>
     </html>
   );
 }

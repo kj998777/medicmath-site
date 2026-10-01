@@ -520,6 +520,28 @@ export default async function Home() {
               })}
             </ol>
           </div>
+          {site.faqs.length > 0 && (
+            <div id="faq" className={wrap + " flex flex-col gap-5 pb-14 md:gap-8 md:pb-24 lg:flex-row lg:gap-[72px]"}>
+              <Reveal className="flex flex-col gap-2.5 lg:w-[440px] lg:shrink-0 md:gap-3.5">
+                <p className="eyebrow">FAQ</p>
+                <h2 className="font-serif text-[26px] font-bold md:text-[36px]">자주 묻는 질문</h2>
+              </Reveal>
+              <div className="flex flex-1 flex-col divide-y divide-line overflow-hidden rounded-lg bg-white">
+                {site.faqs.map((f, i) => (
+                  <details key={i} className="group px-5 md:px-8">
+                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-[15px] font-semibold md:py-6 md:text-[17px] [&::-webkit-details-marker]:hidden">
+                      <span className="flex gap-3">
+                        <span className="text-brand">Q.</span>
+                        {f.q}
+                      </span>
+                      <span aria-hidden="true" className="shrink-0 text-xl leading-none text-muted transition-transform group-open:rotate-45">+</span>
+                    </summary>
+                    <p className="whitespace-pre-line pb-5 pl-7 text-sm leading-[1.8] text-muted md:pb-6 md:text-[15px]">{f.a}</p>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* CONSULT + LOCATION */}

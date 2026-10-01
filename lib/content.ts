@@ -125,6 +125,7 @@ export function sanitizeContent(raw: unknown): SiteContent {
       note: str(x.note, "", MAX.mid),
       link: httpUrl(x.link),
     })),
+    faqs: list(r.faqs, 12, d.faqs, (x) => ({ q: str(x.q, "", MAX.short), a: str(x.a, "", MAX.long) })),
     tuition: (() => {
       const t = (r.tuition && typeof r.tuition === "object" ? r.tuition : {}) as Record<string, unknown>;
       return {
