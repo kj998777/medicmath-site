@@ -248,40 +248,6 @@ export default async function Home() {
               </Reveal>
             ))}
           </div>
-          {site.tuition.rows.length > 0 && (
-            <Reveal className="flex flex-col gap-3 rounded-lg border border-line bg-white p-5 md:p-8">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-lg font-semibold md:text-xl">교습비 안내</h3>
-                <p className="text-xs text-muted md:text-sm">
-                  교육청 등록번호 {site.business.academyNo}
-                  {site.tuition.appliedFrom && <> · 적용일 {site.tuition.appliedFrom}</>}
-                </p>
-              </div>
-              <div className="-mx-1">
-                <table className="w-full text-left text-[13px] md:text-[15px]">
-                  <thead>
-                    <tr className="border-b border-ink text-muted">
-                      <th className="px-1 py-2 font-semibold">교습과목</th>
-                      <th className="whitespace-nowrap px-1 py-2 font-semibold">횟수</th>
-                      <th className="whitespace-nowrap px-1 py-2 text-right font-semibold">총 교습시간</th>
-                      <th className="px-1 py-2 text-right font-semibold">교습비</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {site.tuition.rows.map((t, i) => (
-                      <tr key={i} className="border-b border-line last:border-b-0">
-                        <td className="px-1 py-3">{t.subject}</td>
-                        <td className="px-1 py-3">{t.schedule}</td>
-                        <td className="px-1 py-3 text-right">{t.minutes}</td>
-                        <td className="whitespace-nowrap px-1 py-3 text-right font-semibold text-brand">{t.fee}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              {site.tuition.note && <p className="text-xs leading-[1.7] text-muted md:text-sm">· {site.tuition.note}</p>}
-            </Reveal>
-          )}
         </section>
 
         {/* MEDICCHART — 학습 관리 시스템 홍보 */}
@@ -519,6 +485,23 @@ export default async function Home() {
               <br />
               대표 {site.business.owner} · 사업자등록번호 {site.business.bizNo} · 학원등록번호 {site.business.academyNo}
             </p>
+            {/* 교습비 등 게시: 학원법상 인터넷 광고(홈페이지)에도 교습비·등록번호·교습과목을 전부 표시해야 함 — 눈에 띄지 않게 하단에 작게 */}
+            {site.tuition.rows.length > 0 && (
+              <div id="tuition" className="flex flex-col gap-1 text-xs leading-[1.7] text-[#9A9186] md:text-[13px]">
+                <p>
+                  교습비 등 게시 (교육청 등록번호 {site.business.academyNo}
+                  {site.tuition.appliedFrom && <>, {site.tuition.appliedFrom} 적용</>})
+                </p>
+                <ul>
+                  {site.tuition.rows.map((t, i) => (
+                    <li key={i}>
+                      {t.subject} · {t.schedule} · 총 {t.minutes.replace(/^총\s*/, "")} · 교습비 {t.fee}
+                    </li>
+                  ))}
+                </ul>
+                {site.tuition.note && <p>{site.tuition.note}</p>}
+              </div>
+            )}
           </div>
           <div className="flex gap-5 md:gap-6">
             {links.map((l) =>

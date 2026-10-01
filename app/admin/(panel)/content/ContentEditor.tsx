@@ -336,7 +336,7 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
               <Field label="강조 문구" hint="예: 고등 선행 포함 · 카드에 빨간 띠로 크게 · 비우면 안 보여요">
                 <input className={inputCls} value={p.point} onChange={(e) => setItem("programs", i, { point: e.target.value })} />
               </Field>
-              <Field label="교습비" hint="예: 월 350,000원 · 비우면 안 보여요">
+              <Field label="교습비 (카드에 크게)" hint="비워 두면 카드에는 안 보이고 맨 아래 게시표에만 나와요">
                 <input className={inputCls} value={p.fee} onChange={(e) => setItem("programs", i, { fee: e.target.value })} />
               </Field>
               <Field label="수업 횟수·시간" hint="예: 주 3회 · 150분">
@@ -438,7 +438,7 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
       </Section>
 
       <Section title="교습비 안내 (교습비 등 게시표)">
-        <p className="-mt-2 text-sm text-muted">교육청에 등록한 값 그대로 적어 주세요. 수업 안내 아래 표로 보여요.</p>
+        <p className="-mt-2 text-sm text-muted">교육청에 등록한 값 그대로 적어 주세요. 법적으로 홈페이지에 표시해야 해서, 사이트 맨 아래에 작은 글씨로 보여요.</p>
         {c.tuition.rows.map((t, i) => (
           <div key={i} className="grid gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0 md:grid-cols-[2fr_1fr_1fr_1fr_auto]">
             <Field label="교습과목">
