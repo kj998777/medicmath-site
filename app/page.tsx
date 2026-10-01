@@ -292,13 +292,70 @@ export default async function Home() {
               </Reveal>
             )}
 
+            {/* 메딕차트가 다른 점 — 실제로 운영 중인 기능만 적는다 */}
+            <div className="flex flex-col gap-8 md:gap-12">
+              <Reveal className="flex flex-col gap-3 md:gap-4">
+                <p className="text-xs font-semibold tracking-[3px] text-brand-light md:text-sm">WHAT&apos;S DIFFERENT</p>
+                <h3 className="font-serif text-[26px] font-black leading-[1.35] md:text-[40px]">메딕차트가 다른 다섯 가지</h3>
+              </Reveal>
+              <ol className="flex flex-col">
+                {[
+                  {
+                    t: "문제집이 아니라, 우리 학교 시험지에서 시작합니다",
+                    d: "제주 학교들의 실제 기출을 한 문제씩 직접 풀어 영역·단원·난이도를 붙여 둡니다. 난이도는 정답률로 짐작한 값이 아니라 메딕수학이 직접 풀어 보고 매긴 값입니다.",
+                    tags: [stats ? `제주 학교 시험 ${stats.jejuExams}개` : "제주 학교 기출", "문항마다 영역·단원·난이도", "새 시험이 들어오면 바로 반영"],
+                  },
+                  {
+                    t: "해설도 검증을 거쳐야 학생에게 갑니다",
+                    d: "검토단이 문항을 각자 따로 풀어 정답을 맞춰 봅니다. 답이 갈리면 한 사람이 더 풀어 다수결로 정하고, 그래도 다르면 원장님이 직접 판정합니다. 틀린 해설로 공부하는 일을 막기 위해서입니다.",
+                    tags: ["따로 풀어 대조", "갈리면 다수결", "최종 판정은 원장님"],
+                  },
+                  {
+                    t: "찍어서 맞힌 점수는 빼고 봅니다",
+                    d: "학생이 답안을 낼 때 찍은 문제를 표시합니다. 찍어서 맞힌 배점을 뺀 '실질 점수'로 진짜 실력을 보고, 찍어서 맞힌 문제는 풀이로 다시 확인하게 합니다.",
+                    tags: ["점수 / 실질 점수", "찍은 문제 따로 표시"],
+                  },
+                  {
+                    t: "시험이 쌓일수록 약점이 또렷해집니다",
+                    d: "시험 결과가 학생별로 쌓여 성적 추이, 두 번 이상 반복해서 놓친 '약점 단원', 그중 쉬운데 놓친 문항부터 고른 '다시 풀 문항'을 자동으로 찾아냅니다.",
+                    tags: ["성적 추이 그래프", "약점 단원", "다시 풀 문항 최대 10개"],
+                  },
+                  {
+                    t: "약점에 맞춘 복습지를 바로 만듭니다",
+                    d: "다시 풀 문항으로 복습지를 만들고, 약한 단원은 정리된 기출 문항 중 비슷한 문제를 찾아 맞춤 시험지로 묶습니다. 정답·해설지도 함께 나옵니다.",
+                    tags: ["맞춤 복습지", "비슷한 기출 찾기", "정답·해설지 포함"],
+                  },
+                ].map((f, i) => (
+                  <Reveal
+                    as="li"
+                    key={f.t}
+                    delay={i * 90}
+                    className="grid grid-cols-[40px_1fr] gap-x-4 gap-y-3 border-t border-[#3A362F] py-6 md:grid-cols-[72px_minmax(0,1fr)_minmax(0,1.2fr)] md:gap-x-8 md:py-8"
+                  >
+                    <span className="font-serif text-2xl font-black leading-none text-brand-light md:text-[40px]">{i + 1}</span>
+                    <h4 className="text-lg font-semibold leading-[1.45] md:text-[22px]">{f.t}</h4>
+                    <div className="col-start-2 flex flex-col gap-3 md:col-start-3 md:row-start-1">
+                      <p className="text-sm leading-[1.8] text-soft md:text-base">{f.d}</p>
+                      <ul className="flex flex-wrap gap-2">
+                        {f.tags.map((g) => (
+                          <li key={g} className="rounded-full border border-[#4A453D] px-3 py-1 text-xs text-paper/80 md:text-[13px]">
+                            {g}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </Reveal>
+                ))}
+              </ol>
+            </div>
+
             <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-center lg:gap-16">
               <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8">
                 {[
                   { t: "개별 성적 보고서", d: "영역·단원·난이도별 결과를 한 장에. 몇 점인지보다 어디서 놓쳤는지를 봅니다." },
-                  { t: "다시 볼 단원", d: "반복해서 놓친 단원과 다시 풀어야 할 문항을 골라, 복습 순서를 정해 드립니다." },
                   { t: "전체 해설지", d: "시험마다 모든 문항의 정답과 풀이. 찍어서 맞힌 문제까지 다시 확인합니다." },
-                  { t: "성적 추이", d: "시험이 쌓일수록 오르내림과 약점의 변화를 그래프로 보여 드립니다." },
+                  { t: "누적 학생 보고서", d: "여러 시험을 묶어 성적 추이·약점 단원·다시 풀 문항과 선생님 의견을 한 권으로 정리합니다." },
+                  { t: "입학 진단 보고서", d: "입학 테스트도 학교 기출로 난이도를 고르게 섞어 출제하고, 결과를 심화·표준·기초로 진단합니다." },
                 ].map((f, i) => (
                   <Reveal as="li" key={f.t} delay={i * 110} className="flex flex-col gap-2 border-t border-[#3A362F] pt-5">
                     <span className="font-serif text-lg font-black text-brand-light">{String(i + 1).padStart(2, "0")}</span>
@@ -317,6 +374,16 @@ export default async function Home() {
                       <span className="text-lg font-semibold">영역별 결과</span>
                     </div>
                     <span className="rounded bg-sand px-2 py-1 text-xs text-muted">예시 화면</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 pt-5">
+                    <div className="rounded-lg border border-line px-4 py-3">
+                      <p className="text-xs text-muted">점수</p>
+                      <p className="font-serif text-2xl font-black">86</p>
+                    </div>
+                    <div className="rounded-lg border border-brand/40 bg-brand/5 px-4 py-3">
+                      <p className="text-xs text-brand">실질 점수 · 찍어서 맞힘 2문항</p>
+                      <p className="font-serif text-2xl font-black text-brand">78</p>
+                    </div>
                   </div>
                   <ul className="flex flex-col gap-4 pt-5">
                     {[
