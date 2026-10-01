@@ -7,7 +7,7 @@ import { notifyNewAdmission } from "@/lib/notify";
 export type AdmissionState = {
   ok: boolean;
   message: string;
-  errors?: Partial<Record<"studentName" | "school" | "phone" | "score" | "reason" | "consent", string>>;
+  errors?: Partial<Record<"studentName" | "school" | "phone" | "parentPhone" | "score" | "reason" | "consent", string>>;
 };
 
 function field(fd: FormData, key: string) {
@@ -25,6 +25,7 @@ export async function submitAdmission(_prev: AdmissionState, fd: FormData): Prom
   const studentName = field(fd, "studentName");
   const school = field(fd, "school");
   const phone = field(fd, "phone");
+  const parentPhone = field(fd, "parentPhone");
   const score = field(fd, "score");
   const reason = field(fd, "reason");
   const consent = fd.get("consent") === "on";
@@ -33,7 +34,9 @@ export async function submitAdmission(_prev: AdmissionState, fd: FormData): Prom
   if (!studentName || studentName.length > 30) errors.studentName = "학생 이름을 입력해 주세요.";
   if (!school || school.length > 50) errors.school = "학교와 학년을 입력해 주세요.";
   const digits = phone.replace(/\D/g, "");
-  if (digits.length < 9 || digits.length > 11) errors.phone = "연락처를 정확히 입력해 주세요.";
+  if (digits.length < 9 || digits.length > 11) errors.phone = "학생 연락처를 정확히 입력해 주세요.";
+  const pDigits = parentPhone.replace(/\D/g, "");
+  if (pDigits.length < 9 || pDigits.length > 11) errors.parentPhone = "학부모 연락처를 정확히 입력해 주세요.";
   if (score.length > 50) errors.score = "50자 이내로 입력해 주세요.";
   if (reason.length < 10) errors.reason = "학생 본인이 10자 이상 적어 주세요.";
   else if (reason.length > 1000) errors.reason = "1000자 이내로 입력해 주세요.";
@@ -55,6 +58,7 @@ export async function submitAdmission(_prev: AdmissionState, fd: FormData): Prom
     student_name: studentName,
     school_grade: school,
     phone,
+    parent_phone: parentPhone,
     recent_score: score || null,
     reason,
   });
@@ -65,7 +69,7 @@ export async function submitAdmission(_prev: AdmissionState, fd: FormData): Prom
   }
 
   // 원장님께 문자 알림 (설정돼 있을 때만, 실패해도 신청은 그대로 접수)
-  await notifyNewAdmission({ studentName, school, phone });
+  await notifyNewAdmission({ studentName, school, phone, parentPhone });
 
   return { ok: true, message: "신청이 접수되었습니다. 확인 후 연락드리겠습니다." };
 }

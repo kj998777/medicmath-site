@@ -11,7 +11,7 @@ export default async function AdmissionsPage({ searchParams }: { searchParams: {
   const supabase = createServerSupabase();
   let q = supabase
     .from("admission_requests")
-    .select("id, created_at, student_name, school_grade, phone, recent_score, reason, status, memo")
+    .select("id, created_at, student_name, school_grade, phone, parent_phone, recent_score, reason, status, memo")
     .order("created_at", { ascending: false })
     .limit(300);
   if (filter !== "전체") q = q.eq("status", filter);

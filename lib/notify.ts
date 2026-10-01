@@ -15,7 +15,7 @@ function digits(s: string) {
   return s.replace(/\D/g, "");
 }
 
-export async function notifyNewAdmission(a: { studentName: string; school: string; phone: string }): Promise<void> {
+export async function notifyNewAdmission(a: { studentName: string; school: string; phone: string; parentPhone?: string }): Promise<void> {
   const key = process.env.SOLAPI_API_KEY?.trim();
   const secret = process.env.SOLAPI_API_SECRET?.trim();
   const from = digits(process.env.SMS_FROM ?? "");
@@ -26,7 +26,7 @@ export async function notifyNewAdmission(a: { studentName: string; school: strin
     .slice(0, 3);
   if (!key || !secret || !from || to.length === 0) return;
 
-  const text = `[메딕수학] 새 입학 신청\n${a.studentName} (${a.school})\n연락처 ${a.phone}`;
+  const text = `[메딕수학] 새 입학 신청\n${a.studentName} (${a.school})\n학생 ${a.phone}${a.parentPhone ? `\n학부모 ${a.parentPhone}` : ""}`;
 
   const date = new Date().toISOString();
   const salt = randomBytes(32).toString("hex");

@@ -57,11 +57,16 @@ export default function AdmissionForm({ privacyRetention }: { privacyRetention: 
           <Err msg={e.school} />
         </label>
         <label className="flex flex-col gap-2 text-sm font-semibold">
-          연락처
-          <input name="phone" type="tel" inputMode="tel" placeholder="010-0000-0000" maxLength={20} required className={inputCls} />
+          학생 연락처
+          <input name="phone" type="tel" inputMode="tel" autoComplete="off" placeholder="010-0000-0000" maxLength={20} required className={inputCls} />
           <Err msg={e.phone} />
         </label>
         <label className="flex flex-col gap-2 text-sm font-semibold">
+          학부모 연락처
+          <input name="parentPhone" type="tel" inputMode="tel" autoComplete="off" placeholder="010-0000-0000" maxLength={20} required className={inputCls} />
+          <Err msg={e.parentPhone} />
+        </label>
+        <label className="flex flex-col gap-2 text-sm font-semibold md:col-span-2">
           최근 수학 성적
           <input name="score" type="text" placeholder="예: 내신 3등급" maxLength={50} className={inputCls} />
           <Err msg={e.score} />
@@ -83,7 +88,7 @@ export default function AdmissionForm({ privacyRetention }: { privacyRetention: 
       <label className="flex items-start gap-3 text-sm text-muted">
         <input name="consent" type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-brand" />
         <span>
-          입학 상담을 위해 학생 이름, 학교·학년, 연락처, 성적, 신청 사유를 수집하며, 상담 종료 후 {privacyRetention} 뒤 파기합니다. 이에
+          입학 상담을 위해 학생 이름, 학교·학년, 학생·학부모 연락처, 성적, 신청 사유를 수집하며, 상담 종료 후 {privacyRetention} 뒤 파기합니다. 이에
           동의합니다. (필수)
           <br />
           <Err msg={e.consent} />

@@ -9,6 +9,7 @@ export type Admission = {
   student_name: string;
   school_grade: string;
   phone: string;
+  parent_phone: string | null;
   recent_score: string | null;
   reason: string;
   status: string;
@@ -63,11 +64,21 @@ export default function AdmissionRow({ a }: { a: Admission }) {
       {open && (
         <div className="flex flex-col gap-4 border-t border-line px-5 py-5">
           <dl className="grid grid-cols-[96px_1fr] gap-x-4 gap-y-2 text-sm">
-            <dt className="text-muted">연락처</dt>
+            <dt className="text-muted">학생 연락처</dt>
             <dd>
               <a href={`tel:${tel}`} className="font-semibold underline">
                 {a.phone}
               </a>
+            </dd>
+            <dt className="text-muted">학부모 연락처</dt>
+            <dd>
+              {a.parent_phone ? (
+                <a href={`tel:${a.parent_phone.replace(/[^\d+]/g, "")}`} className="font-semibold underline">
+                  {a.parent_phone}
+                </a>
+              ) : (
+                "—"
+              )}
             </dd>
             <dt className="text-muted">최근 성적</dt>
             <dd>{a.recent_score || "—"}</dd>
