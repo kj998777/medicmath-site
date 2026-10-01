@@ -59,7 +59,8 @@ export const defaultContent: SiteContent = {
   heroPhotos: [],
   privacyRetention: "[보관 기간]",
   business: { owner: "[이름]", bizNo: "[000-00-00000]", academyNo: "제2979호" },
-  links: { blog: "", instagram: "", kakao: "" },
+  // 2026-10-01: 원장님 네이버 블로그(메딕차트 홍보 배너와 같은 주소). DB 값이 있으면 그 값을 쓴다.
+  links: { blog: "https://blog.naver.com/yijean", instagram: "", kakao: "" },
   rules: [
     { title: "과제는 예외 없이", body: "[과제 미이행 시 원칙 — 예: 당일 남아서 완료 후 귀가]" },
     { title: "틀린 문제는 그날 끝낸다", body: "[오답 관리 방식 — 예: 오답 재시험 통과 전까지 다음 진도 없음]" },
