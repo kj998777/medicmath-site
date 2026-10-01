@@ -67,6 +67,16 @@ export function sanitizeContent(raw: unknown): SiteContent {
       body: str(about.body, d.about.body, 2000),
       highlight: str(about.highlight, d.about.highlight, MAX.mid),
     },
+    teacherStory: (() => {
+      const t = (r.teacherStory && typeof r.teacherStory === "object" ? r.teacherStory : {}) as Record<string, unknown>;
+      const facts = Array.isArray(t.facts) ? t.facts.map((f) => str(f, "", 80)).filter(Boolean).slice(0, 5) : d.teacherStory.facts;
+      return {
+        title: str(t.title, d.teacherStory.title, MAX.mid),
+        body: str(t.body, d.teacherStory.body, MAX.long),
+        facts,
+        link: "link" in t ? httpUrl(t.link) : d.teacherStory.link,
+      };
+    })(),
     tagline: str(r.tagline, d.tagline, MAX.short),
     phone: str(r.phone, d.phone, 20).replace(/[^\d\-+() ]/g, ""),
     hours: str(r.hours, d.hours, MAX.mid),

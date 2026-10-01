@@ -395,6 +395,26 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
         )}
       </Section>
 
+      <Section title="강사진 위 이야기 (누가 가르치나)">
+        <p className="-mt-2 text-sm text-muted">강사진 카드 위에 크게 보여요. 제목을 비우면 이 상자가 사라져요.</p>
+        <Field label="제목">
+          <input className={inputCls} value={c.teacherStory.title} onChange={(e) => set("teacherStory", { ...c.teacherStory, title: e.target.value })} />
+        </Field>
+        <Field label="본문" hint="빈 줄로 문단을 나눠요">
+          <textarea className={areaCls} value={c.teacherStory.body} onChange={(e) => set("teacherStory", { ...c.teacherStory, body: e.target.value })} />
+        </Field>
+        <Field label="핵심 사실" hint="한 줄에 하나씩 · 최대 5줄">
+          <textarea
+            className={areaCls}
+            value={c.teacherStory.facts.join("\n")}
+            onChange={(e) => set("teacherStory", { ...c.teacherStory, facts: e.target.value.split("\n").slice(0, 5) })}
+          />
+        </Field>
+        <Field label="자세히 보기 링크" hint="블로그 글 주소 · 비우면 안 보여요">
+          <input className={inputCls} value={c.teacherStory.link} onChange={(e) => set("teacherStory", { ...c.teacherStory, link: e.target.value })} />
+        </Field>
+      </Section>
+
       <Section title="강사진">
         {c.teachers.map((t: Teacher, i) => (
           <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">

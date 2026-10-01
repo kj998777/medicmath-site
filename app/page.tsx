@@ -109,141 +109,50 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ABOUT — 학원 소개 */}
-        <section id="about" className="border-b border-line bg-white">
-          <div className={wrap + " grid grid-cols-1 gap-8 py-14 md:gap-12 md:py-24 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20"}>
-            <Reveal className="flex flex-col gap-4 md:gap-6">
-              <p className="eyebrow">ABOUT MEDIC MATH</p>
-              <h2 className="font-serif text-[32px] font-black leading-[1.3] tracking-[-0.5px] md:text-[48px] md:leading-[1.25] md:tracking-[-1px]">
-                {site.about.headline}
-              </h2>
-              {site.about.subtitle && (
-                <p className="flex items-center gap-3 text-[15px] font-semibold text-muted md:text-[17px]">
-                  <span className="h-[2px] w-6 shrink-0 bg-brand" aria-hidden="true" />
-                  {site.about.subtitle}
-                </p>
-              )}
-            </Reveal>
-            <Reveal delay={150} className="flex flex-col gap-6 md:gap-8 lg:pt-10">
-              <div className="flex flex-col gap-4 text-base leading-[1.85] text-ink/85 md:text-[18px]">
-                {site.about.body
-                  .split(/\n\s*\n/)
-                  .map((para) => para.trim())
-                  .filter(Boolean)
-                  .map((para, i) => (
-                    <p key={i} className="whitespace-pre-line">
-                      {para}
-                    </p>
-                  ))}
-              </div>
-              {site.about.highlight && (
-                <p className="border-t-2 border-ink pt-5 font-serif text-[24px] font-bold leading-[1.4] text-brand md:pt-6 md:text-[30px]">
-                  {site.about.highlight}
-                </p>
-              )}
-            </Reveal>
-          </div>
-        </section>
-
-        {/* RULES */}
-        <section id="rules" className={wrap + " flex flex-col gap-7 py-14 md:gap-14 md:py-24"}>
-          <Reveal className="flex flex-col gap-2.5 md:flex-row md:items-end md:justify-between">
-            <div className="flex flex-col gap-2.5 md:gap-3.5">
-              <p className="eyebrow">OUR RULES</p>
-              <h2 className="section-title">
-                메딕수학의<br className="md:hidden" /> 원칙
-              </h2>
-            </div>
-            <p className="text-[15px] leading-[1.7] text-muted md:max-w-[440px] md:text-[17px]">
-              편하게 다니는 학원이 아닙니다. 대신, 끝까지 따라온 학생은 반드시 결과로 보답받습니다.
-            </p>
-          </Reveal>
-          <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-8">
-            {site.rules.map((r, i) => (
-              <Reveal key={i} delay={i * 120} className="flex gap-4 border-t-2 border-ink pt-[18px] md:flex-col md:gap-3.5 md:border-t-[3px] md:pt-7">
-                <span className="font-serif text-[30px] font-black leading-none text-brand md:text-[44px]">{String(i + 1).padStart(2, "0")}</span>
-                <div className="flex flex-col gap-1.5 md:gap-3.5">
-                  <h3 className="text-[19px] font-semibold md:text-[25px]">{r.title}</h3>
-                  <p className="text-sm leading-[1.7] text-muted md:text-base md:leading-[1.75]">{r.body}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        {/* ADMISSION */}
-        <section id="admission" className="bg-sand">
-          <div className={wrap + " flex flex-col gap-6 py-14 md:gap-10 md:py-24 lg:flex-row lg:gap-[72px]"}>
-            <Reveal className="flex flex-col gap-2.5 lg:w-[440px] lg:shrink-0 md:gap-[22px]">
-              <p className="eyebrow">ADMISSION</p>
-              <h2 className="section-title">
-                아무나<br className="hidden md:inline" /> 받지 않습니다
-              </h2>
-              <p className="text-[15px] leading-[1.7] text-muted md:text-[17px] md:leading-[1.75]">
-                실력보다 의지를 봅니다. 지금 점수가 낮아도 괜찮습니다. 공부할 각오가 되어 있는지, 그것만 확인합니다.
-              </p>
-            </Reveal>
-            <ol className="grid flex-1 grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-5">
-              {site.steps.map((s, i) => {
-                const last = i === site.steps.length - 1;
-                return (
-                  <Reveal
-                    as="li"
-                    key={i}
-                    delay={i * 110}
-                    className={
-                      "flex gap-4 rounded-md p-5 md:flex-col md:gap-2.5 md:rounded-lg md:p-8 " +
-                      (last ? "bg-ink text-paper" : "bg-white")
-                    }
-                  >
-                    <span className={"w-[52px] shrink-0 pt-[3px] text-[13px] font-semibold md:w-auto md:pt-0 md:text-sm " + (last ? "text-brand-light" : "text-brand")}>
-                      STEP {i + 1}
-                    </span>
-                    <div className="flex flex-col gap-1 md:gap-2.5">
-                      <h3 className="text-lg font-semibold md:text-[22px]">{s.title}</h3>
-                      <p className={"text-sm md:text-[15px] md:leading-[1.7] " + (last ? "text-soft" : "text-muted")}>{s.body}</p>
-                    </div>
-                  </Reveal>
-                );
-              })}
-            </ol>
-          </div>
-        </section>
-
-        {/* PROGRAMS */}
-        <section id="programs" className={wrap + " flex flex-col gap-6 py-14 md:gap-11 md:pb-[72px] md:pt-24"}>
+        {/* TEACHERS */}
+        <section id="teachers" className={wrap + " flex flex-col gap-6 py-14 md:gap-11 md:py-24"}>
           <Reveal className="flex flex-col gap-2.5 md:gap-3.5">
-            <p className="eyebrow">PROGRAMS</p>
-            <h2 className="section-title">수업 안내</h2>
+            <p className="eyebrow">TEACHERS</p>
+            <h2 className="section-title">누가 가르치나요</h2>
           </Reveal>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-            {site.programs.map((p, i) => (
-              <Reveal as="article" key={i} delay={i * 120} className="flex flex-col gap-3 rounded-md border border-line bg-white p-6 md:min-h-[300px] md:gap-4 md:rounded-lg md:p-9">
-                <div className="flex items-start justify-between gap-3">
-                  <span className={"self-start rounded-sm px-2.5 py-[5px] text-[13px] font-semibold text-white md:px-3 md:py-1.5 md:text-sm " + (p.highlight ? "bg-brand" : "bg-ink")}>
-                    {p.badge}
-                  </span>
-                  {p.capacity > 0 && <Seats enrolled={p.enrolled} capacity={p.capacity} />}
-                </div>
-                <h3 className="text-xl font-semibold md:text-[26px]">{p.title}</h3>
-                {p.point && (
-                  <p className="flex items-center gap-2 self-start rounded-sm border-2 border-brand bg-brand/5 px-3 py-1.5 text-[15px] font-bold text-brand md:text-[17px]">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1l2.1 4.3 4.7.7-3.4 3.3.8 4.7L8 11.8 3.8 14l.8-4.7L1.2 6l4.7-.7z" /></svg>
-                    {p.point}
-                  </p>
-                )}
-                <p className="flex-1 text-sm leading-[1.7] text-muted md:text-base">{p.body}</p>
-                {p.fee && (
-                  <p className="flex items-baseline justify-between gap-3 text-sm text-muted md:text-[15px]">
-                    교습비
-                    <span className="font-serif text-xl font-black text-ink md:text-2xl">{p.fee}</span>
-                  </p>
-                )}
-                <div className="flex items-center justify-between border-t border-line pt-3 text-sm text-muted md:pt-4 md:text-[15px]">
-                  <span>{p.schedule}</span>
-                  <a href="#consult" className="py-3 font-semibold text-ink hover:text-brand md:py-0">
-                    상담하기 →
+          {(site.teacherStory.title || site.teacherStory.body) && (
+            <Reveal className="grid grid-cols-1 gap-6 rounded-lg border border-brand/30 bg-white p-6 md:gap-10 md:p-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+              <div className="flex flex-col gap-4">
+                <h3 className="font-serif text-[24px] font-black leading-[1.4] md:text-[34px]">{site.teacherStory.title}</h3>
+                {site.teacherStory.body && <p className="whitespace-pre-line text-[15px] leading-[1.85] text-muted md:text-[17px]">{site.teacherStory.body}</p>}
+                {site.teacherStory.link && (
+                  <a href={site.teacherStory.link} target="_blank" rel="noopener noreferrer" className="self-start text-sm font-semibold text-ink underline decoration-brand decoration-2 underline-offset-4 hover:text-brand md:text-[15px]">
+                    이야기 자세히 보기 →
                   </a>
+                )}
+              </div>
+              {site.teacherStory.facts.length > 0 && (
+                <ul className="flex flex-col justify-center gap-3">
+                  {site.teacherStory.facts.map((f) => (
+                    <li key={f} className="flex items-start gap-3 rounded-md bg-sand px-4 py-3.5 text-[15px] font-semibold leading-[1.5] md:text-base">
+                      <span className="mt-[7px] h-2 w-2 shrink-0 bg-brand" aria-hidden="true" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Reveal>
+          )}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+            {site.teachers.map((t, i) => (
+              <Reveal key={i} delay={i * 120} className="flex gap-4 rounded-md border border-line bg-white p-4 md:gap-5 md:rounded-lg md:p-6">
+                {t.photo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={t.photo} alt={t.name} className="h-[110px] w-[88px] shrink-0 rounded object-cover md:h-[180px] md:w-[140px]" />
+                ) : (
+                  <div className="placeholder-box h-[110px] w-[88px] shrink-0 rounded border-[#BDB4A7] bg-sand text-[13px] text-[#6E665C] md:h-[180px] md:w-[140px] md:text-sm">
+                    [사진]
+                  </div>
+                )}
+                <div className="flex flex-col gap-1.5 pt-1 md:gap-2.5">
+                  <p className="text-lg font-semibold md:text-[21px]">{t.name}</p>
+                  <p className="text-sm font-semibold text-brand md:text-[15px]">{t.grades}</p>
+                  <p className="whitespace-pre-line text-sm leading-[1.6] text-muted md:text-[15px] md:leading-[1.7]">{t.career}</p>
                 </div>
               </Reveal>
             ))}
@@ -472,33 +381,144 @@ export default async function Home() {
           )}
         </section>
 
-        {/* TEACHERS */}
-        <section id="teachers" className={wrap + " flex flex-col gap-6 pb-14 pt-4 md:gap-11 md:pb-20 md:pt-16"}>
-          <Reveal className="flex flex-col gap-2.5 md:gap-3.5">
-            <p className="eyebrow">TEACHERS</p>
-            <h2 className="section-title">강사진</h2>
+        {/* ABOUT — 학원 소개 */}
+        <section id="about" className="border-b border-line bg-white">
+          <div className={wrap + " grid grid-cols-1 gap-8 py-14 md:gap-12 md:py-24 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20"}>
+            <Reveal className="flex flex-col gap-4 md:gap-6">
+              <p className="eyebrow">ABOUT MEDIC MATH</p>
+              <h2 className="font-serif text-[32px] font-black leading-[1.3] tracking-[-0.5px] md:text-[48px] md:leading-[1.25] md:tracking-[-1px]">
+                {site.about.headline}
+              </h2>
+              {site.about.subtitle && (
+                <p className="flex items-center gap-3 text-[15px] font-semibold text-muted md:text-[17px]">
+                  <span className="h-[2px] w-6 shrink-0 bg-brand" aria-hidden="true" />
+                  {site.about.subtitle}
+                </p>
+              )}
+            </Reveal>
+            <Reveal delay={150} className="flex flex-col gap-6 md:gap-8 lg:pt-10">
+              <div className="flex flex-col gap-4 text-base leading-[1.85] text-ink/85 md:text-[18px]">
+                {site.about.body
+                  .split(/\n\s*\n/)
+                  .map((para) => para.trim())
+                  .filter(Boolean)
+                  .map((para, i) => (
+                    <p key={i} className="whitespace-pre-line">
+                      {para}
+                    </p>
+                  ))}
+              </div>
+              {site.about.highlight && (
+                <p className="border-t-2 border-ink pt-5 font-serif text-[24px] font-bold leading-[1.4] text-brand md:pt-6 md:text-[30px]">
+                  {site.about.highlight}
+                </p>
+              )}
+            </Reveal>
+          </div>
+        </section>
+
+        {/* RULES */}
+        <section id="rules" className={wrap + " flex flex-col gap-7 py-14 md:gap-14 md:py-24"}>
+          <Reveal className="flex flex-col gap-2.5 md:flex-row md:items-end md:justify-between">
+            <div className="flex flex-col gap-2.5 md:gap-3.5">
+              <p className="eyebrow">OUR RULES</p>
+              <h2 className="section-title">
+                메딕수학의<br className="md:hidden" /> 원칙
+              </h2>
+            </div>
+            <p className="text-[15px] leading-[1.7] text-muted md:max-w-[440px] md:text-[17px]">
+              편하게 다니는 학원이 아닙니다. 대신, 끝까지 따라온 학생은 반드시 결과로 보답받습니다.
+            </p>
           </Reveal>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
-            {site.teachers.map((t, i) => (
-              <Reveal key={i} delay={i * 120} className="flex gap-4 rounded-md border border-line bg-white p-4 md:gap-5 md:rounded-lg md:p-6">
-                {t.photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={t.photo} alt={t.name} className="h-[110px] w-[88px] shrink-0 rounded object-cover md:h-[180px] md:w-[140px]" />
-                ) : (
-                  <div className="placeholder-box h-[110px] w-[88px] shrink-0 rounded border-[#BDB4A7] bg-sand text-[13px] text-[#6E665C] md:h-[180px] md:w-[140px] md:text-sm">
-                    [사진]
-                  </div>
-                )}
-                <div className="flex flex-col gap-1.5 pt-1 md:gap-2.5">
-                  <p className="text-lg font-semibold md:text-[21px]">{t.name}</p>
-                  <p className="text-sm leading-[1.6] text-muted md:text-[15px] md:leading-[1.7]">
-                    {t.grades}
-                    <br />
-                    {t.career}
-                  </p>
+          <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-8">
+            {site.rules.map((r, i) => (
+              <Reveal key={i} delay={i * 120} className="flex gap-4 border-t-2 border-ink pt-[18px] md:flex-col md:gap-3.5 md:border-t-[3px] md:pt-7">
+                <span className="font-serif text-[30px] font-black leading-none text-brand md:text-[44px]">{String(i + 1).padStart(2, "0")}</span>
+                <div className="flex flex-col gap-1.5 md:gap-3.5">
+                  <h3 className="text-[19px] font-semibold md:text-[25px]">{r.title}</h3>
+                  <p className="text-sm leading-[1.7] text-muted md:text-base md:leading-[1.75]">{r.body}</p>
                 </div>
               </Reveal>
             ))}
+          </div>
+        </section>
+
+        {/* PROGRAMS */}
+        <section id="programs" className={wrap + " flex flex-col gap-6 py-14 md:gap-11 md:pb-[72px] md:pt-24"}>
+          <Reveal className="flex flex-col gap-2.5 md:gap-3.5">
+            <p className="eyebrow">PROGRAMS</p>
+            <h2 className="section-title">수업 안내</h2>
+          </Reveal>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
+            {site.programs.map((p, i) => (
+              <Reveal as="article" key={i} delay={i * 120} className="flex flex-col gap-3 rounded-md border border-line bg-white p-6 md:min-h-[300px] md:gap-4 md:rounded-lg md:p-9">
+                <div className="flex items-start justify-between gap-3">
+                  <span className={"self-start rounded-sm px-2.5 py-[5px] text-[13px] font-semibold text-white md:px-3 md:py-1.5 md:text-sm " + (p.highlight ? "bg-brand" : "bg-ink")}>
+                    {p.badge}
+                  </span>
+                  {p.capacity > 0 && <Seats enrolled={p.enrolled} capacity={p.capacity} />}
+                </div>
+                <h3 className="text-xl font-semibold md:text-[26px]">{p.title}</h3>
+                {p.point && (
+                  <p className="flex items-center gap-2 self-start rounded-sm border-2 border-brand bg-brand/5 px-3 py-1.5 text-[15px] font-bold text-brand md:text-[17px]">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1l2.1 4.3 4.7.7-3.4 3.3.8 4.7L8 11.8 3.8 14l.8-4.7L1.2 6l4.7-.7z" /></svg>
+                    {p.point}
+                  </p>
+                )}
+                <p className="flex-1 text-sm leading-[1.7] text-muted md:text-base">{p.body}</p>
+                {p.fee && (
+                  <p className="flex items-baseline justify-between gap-3 text-sm text-muted md:text-[15px]">
+                    교습비
+                    <span className="font-serif text-xl font-black text-ink md:text-2xl">{p.fee}</span>
+                  </p>
+                )}
+                <div className="flex items-center justify-between border-t border-line pt-3 text-sm text-muted md:pt-4 md:text-[15px]">
+                  <span>{p.schedule}</span>
+                  <a href="#consult" className="py-3 font-semibold text-ink hover:text-brand md:py-0">
+                    상담하기 →
+                  </a>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ADMISSION */}
+        <section id="admission" className="bg-sand">
+          <div className={wrap + " flex flex-col gap-6 py-14 md:gap-10 md:py-24 lg:flex-row lg:gap-[72px]"}>
+            <Reveal className="flex flex-col gap-2.5 lg:w-[440px] lg:shrink-0 md:gap-[22px]">
+              <p className="eyebrow">ADMISSION</p>
+              <h2 className="section-title">
+                아무나<br className="hidden md:inline" /> 받지 않습니다
+              </h2>
+              <p className="text-[15px] leading-[1.7] text-muted md:text-[17px] md:leading-[1.75]">
+                실력보다 의지를 봅니다. 지금 점수가 낮아도 괜찮습니다. 공부할 각오가 되어 있는지, 그것만 확인합니다.
+              </p>
+            </Reveal>
+            <ol className="grid flex-1 grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-5">
+              {site.steps.map((s, i) => {
+                const last = i === site.steps.length - 1;
+                return (
+                  <Reveal
+                    as="li"
+                    key={i}
+                    delay={i * 110}
+                    className={
+                      "flex gap-4 rounded-md p-5 md:flex-col md:gap-2.5 md:rounded-lg md:p-8 " +
+                      (last ? "bg-ink text-paper" : "bg-white")
+                    }
+                  >
+                    <span className={"w-[52px] shrink-0 pt-[3px] text-[13px] font-semibold md:w-auto md:pt-0 md:text-sm " + (last ? "text-brand-light" : "text-brand")}>
+                      STEP {i + 1}
+                    </span>
+                    <div className="flex flex-col gap-1 md:gap-2.5">
+                      <h3 className="text-lg font-semibold md:text-[22px]">{s.title}</h3>
+                      <p className={"text-sm md:text-[15px] md:leading-[1.7] " + (last ? "text-soft" : "text-muted")}>{s.body}</p>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </ol>
           </div>
         </section>
 

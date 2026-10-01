@@ -18,10 +18,14 @@ export type Review = { quote: string; who: string };
 export type Case = { who: string; exam: string; before: string; after: string; period: string; note: string; link: string };
 
 // 학원 소개: 제목(큰 글씨), 부제, 본문(빈 줄로 문단 구분), 강조 문장(본문 중 크게 따로 보여줄 한 줄)
+// 강사진 맨 위 이야기(누가 가르치나): 제목·본문·핵심 사실 몇 줄·자세히 보기 링크
+export type TeacherStory = { title: string; body: string; facts: string[]; link: string };
+
 export type About = { headline: string; subtitle: string; body: string; highlight: string };
 
 export type SiteContent = {
   about: About;
+  teacherStory: TeacherStory;
   tagline: string;
   phone: string;
   hours: string;
@@ -48,6 +52,12 @@ export const defaultContent: SiteContent = {
     subtitle: "중·고등부 (최)상위권 수학 전문 — 메딕수학",
     body: "국어·영어·수학·과학, 여러 과목을 배우지만 정작 '공부하는 법'은 배운 적 있으신가요?\n\n상위권과 하위권을 가르는 건 머리가 아니라 공부의 효율입니다.\n\n메딕수학은 적게 공부하고 최상의 결과를 내는 것, 학습 능력 자체를 키우는 데서 시작합니다.",
     highlight: "효율의 차이가 곧 성적의 차이입니다.",
+  },
+  teacherStory: {
+    title: "원장에게 6년을 배운 아들이, 이제 함께 가르칩니다.",
+    body: "이은상 선생님은 이진 원장에게 6년 동안 수학을 배웠습니다. 고3 6월 모의평가 84점에서 다시 시작해, 4개월 뒤 수능 수학 96점(백분위 99)을 받았습니다.\n\n서울대 통계학과·포스텍·제주의대에 합격했고, 지금은 제주의대에 다니며 메딕수학 고등부를 가르칩니다. 가르치는 방법이 결과로 증명된 학원입니다.",
+    facts: ["이진 원장 — 수학을 가르친 지 25년", "이은상 선생님 — 수능 수학 96점 · 백분위 99", "서울대 통계학과 · 포스텍 · 제주의대 합격"],
+    link: "https://blog.naver.com/yijean/224308616199",
   },
   tagline: "제주시 중·고등 수학 전문",
   phone: "064-702-3455",
@@ -81,9 +91,8 @@ export const defaultContent: SiteContent = {
     { badge: "고3", highlight: true, title: "4개월 수능대비 특강", body: "기출문제들을 정확하게 분석하여 수능에서 가져야할 관점들을 새워주고 연습시킵니다.", point: "주말 5시간씩", schedule: "토·일 · 회당 5시간", fee: "", enrolled: 0, capacity: 0 },
   ],
   teachers: [
-    { name: "[이름] 원장", grades: "[담당 학년]", career: "[학력·주요 약력]", photo: "" },
-    { name: "[이름] 선생님", grades: "[담당 학년]", career: "[학력·주요 약력]", photo: "" },
-    { name: "[이름] 선생님", grades: "[담당 학년]", career: "[학력·주요 약력]", photo: "" },
+    { name: "이진 원장", grades: "초등학교 6학년, 중학교 1~3학년", career: "수학을 가르친 지 25년", photo: "" },
+    { name: "이은상 선생님", grades: "고등학교 1~3학년", career: "제주의대 재학\n이진 원장에게 6년간 수학을 배움\n수능 수학 96점(백분위 99)\n서울대 통계학과·포스텍·제주의대 합격", photo: "" },
   ],
   reviews: [
     { quote: "[실제 수강 후기]", who: "[학교 · 학년] 학생" },
@@ -107,11 +116,11 @@ export const defaultContent: SiteContent = {
 };
 
 export const nav = [
-  { href: "#about", label: "학원 소개" },
-  { href: "#rules", label: "학원 원칙" },
-  { href: "#admission", label: "입학 안내" },
-  { href: "#programs", label: "수업 안내" },
+  { href: "#teachers", label: "강사진" },
   { href: "#medicchart", label: "메딕차트" },
   { href: "#cases", label: "향상 사례" },
+  { href: "#rules", label: "학원 원칙" },
+  { href: "#programs", label: "수업 안내" },
+  { href: "#admission", label: "입학 안내" },
   { href: "#location", label: "오시는 길" },
 ];
