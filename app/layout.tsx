@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
+// 대표 주소(2026-10-01 구매). medicmath.com·medicmath-site.vercel.app은 이 주소로 넘어온다.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.medicmath.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "메딕수학 | 제주시 중·고등 수학 전문 학원",
   description:
     "결심한 학생만 받습니다. 메딕수학은 성적을 올리기로 결심한 제주시 중·고등학생을 가르치는 수학 전문 학원입니다.",
+  alternates: { canonical: "/" },
   openGraph: {
     title: "메딕수학 | 결심한 학생만 받습니다",
     description: "제주시 중앙로 312 · 중·고등 수학 전문 학원",
