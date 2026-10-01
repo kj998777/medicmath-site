@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import SiteAnalytics from "@/components/SiteAnalytics";
+import { NAVER_SITE_VERIFICATION, GOOGLE_SITE_VERIFICATION } from "@/lib/seoVerify";
 
 // 대표 주소(2026-10-01 구매). medicmath.com·medicmath-site.vercel.app은 이 주소로 넘어온다.
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.medicmath.com";
@@ -9,7 +10,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "메딕수학 | 제주시 중·고등 수학 전문 학원",
   description:
-    "결심한 학생만 받습니다. 메딕수학은 성적을 올리기로 결심한 제주시 중·고등학생을 가르치는 수학 전문 학원입니다.",
+    "결심한 학생만 받습니다. 제주시 중앙로 메딕수학 — 제주 학교 기출을 직접 분석하는 메딕차트로 내신·수능을 준비하는 중·고등 수학 전문 학원입니다.",
+  keywords: ["제주시 수학학원", "제주 수학학원", "제주 고등수학", "제주 중등수학", "제주 내신 수학", "메딕수학", "메딕차트", "이도동 수학학원"],
+  verification: {
+    ...(GOOGLE_SITE_VERIFICATION ? { google: GOOGLE_SITE_VERIFICATION } : {}),
+    ...(NAVER_SITE_VERIFICATION ? { other: { "naver-site-verification": NAVER_SITE_VERIFICATION } } : {}),
+  },
   alternates: { canonical: "/" },
   openGraph: {
     title: "메딕수학 | 결심한 학생만 받습니다",

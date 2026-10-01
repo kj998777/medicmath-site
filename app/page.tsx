@@ -72,6 +72,42 @@ export default async function Home() {
     <div id="top">
       <Header blogHref={site.links.blog} />
 
+      {/* 검색엔진용 학원 정보(구조화 데이터) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": ["EducationalOrganization", "LocalBusiness"],
+              name: "메딕수학",
+              alternateName: ["메딕수학학원", "MEDIC MATH ACADEMY"],
+              url: "https://www.medicmath.com",
+              logo: "https://www.medicmath.com/logo.png",
+              image: "https://www.medicmath.com/logo.png",
+              description: "결심한 학생만 받습니다. 제주시 중·고등 수학 전문 학원.",
+              telephone: site.phone || undefined,
+              address: {
+                "@type": "PostalAddress",
+                streetAddress: "중앙로 312, 2층",
+                addressLocality: "제주시",
+                addressRegion: "제주특별자치도",
+                addressCountry: "KR",
+              },
+              openingHoursSpecification: [
+                { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "13:00", closes: "22:00" },
+                { "@type": "OpeningHoursSpecification", dayOfWeek: ["Saturday", "Sunday"], opens: "10:00", closes: "22:00" },
+              ],
+              sameAs: [site.links.blog, site.links.instagram, site.links.kakao].filter(Boolean),
+            },
+            site.faqs.length > 0 && {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: site.faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+            },
+          ].filter(Boolean)).replace(/</g, "\\u003c"),
+        }}
+      />
       <main className="pb-[84px] lg:pb-0">
         {/* HERO */}
         <section className="bg-ink text-paper">
