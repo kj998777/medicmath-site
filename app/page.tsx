@@ -226,6 +226,12 @@ export default async function Home() {
                   {p.capacity > 0 && <Seats enrolled={p.enrolled} capacity={p.capacity} />}
                 </div>
                 <h3 className="text-xl font-semibold md:text-[26px]">{p.title}</h3>
+                {p.point && (
+                  <p className="flex items-center gap-2 self-start rounded-sm border-2 border-brand bg-brand/5 px-3 py-1.5 text-[15px] font-bold text-brand md:text-[17px]">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1l2.1 4.3 4.7.7-3.4 3.3.8 4.7L8 11.8 3.8 14l.8-4.7L1.2 6l4.7-.7z" /></svg>
+                    {p.point}
+                  </p>
+                )}
                 <p className="flex-1 text-sm leading-[1.7] text-muted md:text-base">{p.body}</p>
                 <div className="flex items-center justify-between border-t border-line pt-3 text-sm text-muted md:pt-4 md:text-[15px]">
                   <span>{p.schedule}</span>

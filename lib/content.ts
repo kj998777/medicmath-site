@@ -94,6 +94,7 @@ export function sanitizeContent(raw: unknown): SiteContent {
       highlight: x.highlight === true,
       title: str(x.title, "", MAX.short),
       body: str(x.body, "", MAX.long),
+      point: str(x.point, "", 40),
       schedule: str(x.schedule, "", MAX.short),
       enrolled: count(x.enrolled),
       capacity: count(x.capacity),

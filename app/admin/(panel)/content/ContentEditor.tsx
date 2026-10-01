@@ -331,6 +331,9 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
               <Field label="과정 이름">
                 <input className={inputCls} value={p.title} onChange={(e) => setItem("programs", i, { title: e.target.value })} />
               </Field>
+              <Field label="강조 문구" hint="예: 고등 선행 포함 · 카드에 빨간 띠로 크게 · 비우면 안 보여요">
+                <input className={inputCls} value={p.point} onChange={(e) => setItem("programs", i, { point: e.target.value })} />
+              </Field>
               <Field label="수업 횟수·시간" hint="예: 주 3회 · 150분">
                 <input className={inputCls} value={p.schedule} onChange={(e) => setItem("programs", i, { schedule: e.target.value })} />
               </Field>
@@ -380,7 +383,7 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
           <button
             type="button"
             className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
-            onClick={() => set("programs", [...c.programs, { badge: "", highlight: false, title: "", body: "", schedule: "", enrolled: 0, capacity: 0 }])}
+            onClick={() => set("programs", [...c.programs, { badge: "", highlight: false, title: "", body: "", point: "", schedule: "", enrolled: 0, capacity: 0 }])}
           >
             + 과정 추가
           </button>

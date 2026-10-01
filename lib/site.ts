@@ -5,7 +5,8 @@
 export type Rule = { title: string; body: string };
 export type Step = { title: string; body: string };
 // enrolled/capacity: 현재 수강 인원 / 정원. capacity가 0이면 사이트에 인원 표시를 하지 않는다.
-export type Program = { badge: string; highlight: boolean; title: string; body: string; schedule: string; enrolled: number; capacity: number };
+// point: 카드 안에 크게 강조할 한 줄(예: 고등 선행 포함) — 비우면 안 보임
+export type Program = { badge: string; highlight: boolean; title: string; body: string; point: string; schedule: string; enrolled: number; capacity: number };
 export type Teacher = { name: string; grades: string; career: string; photo: string };
 export type Review = { quote: string; who: string };
 // 성적 향상 사례: 누가(학교·학년) / 어떤 시험 / 이전 → 이후 / 걸린 기간 / 한마디
@@ -66,9 +67,12 @@ export const defaultContent: SiteContent = {
     { title: "등록 · 수업 시작", body: "[첫 달 적응 기간 등 안내]" },
   ],
   programs: [
-    { badge: "중등부", highlight: false, title: "[과정명 — 예: 내신 + 선행]", body: "[대상 학년, 수업 목표, 교재·진도]", schedule: "주 [0]회 · [000]분", enrolled: 0, capacity: 0 },
-    { badge: "고1 · 고2", highlight: false, title: "[과정명 — 예: 학교별 내신 완성]", body: "[대상 학교, 수업 목표, 시험 대비 방식]", schedule: "주 [0]회 · [000]분", enrolled: 0, capacity: 0 },
-    { badge: "고3 · 수능", highlight: true, title: "[과정명 — 예: 수능 실전반]", body: "[선택과목, 모의고사 운영, 목표 등급]", schedule: "주 [0]회 · [000]분", enrolled: 0, capacity: 0 },
+    { badge: "중1 과정", highlight: false, title: "학교별 내신 완성", body: "메딕수학 자체 제작교재 및 매쓰플랫을 통한 학생 개별관리 시스템으로 정확한 개념 진도를 나가며, 메딕수학 자체 개발 학교별 기출분석 시스템인 '메딕차트'를 이용하여 학교별 기출문제 학습", point: "", schedule: "", enrolled: 0, capacity: 0 },
+    { badge: "중2 과정", highlight: false, title: "학교별 내신 완성", body: "메딕수학 자체 제작교재 및 매쓰플랫을 통한 학생 개별관리 시스템으로 정확한 개념 진도를 나가며, 메딕수학 자체 개발 학교별 기출분석 시스템인 '메딕차트'를 이용하여 학교별 기출문제 학습", point: "", schedule: "", enrolled: 0, capacity: 0 },
+    { badge: "중3 과정", highlight: false, title: "학교별 내신 완성 + 고등 선행", body: "메딕수학 자체 제작교재 및 매쓰플랫을 통한 학생 개별관리 시스템으로 정확한 개념 진도를 나가며, 메딕수학 자체 개발 학교별 기출분석 시스템인 '메딕차트'를 이용하여 학교별 기출문제 학습", point: "고등 선행 포함", schedule: "", enrolled: 0, capacity: 0 },
+    { badge: "고1", highlight: false, title: "학교별 내신 완성", body: "메딕수학 자체 제작교재 및 매쓰플랫을 통한 학생 개별관리 시스템으로 정확한 개념 진도를 나가며, 메딕수학 자체 개발 학교별 기출분석 시스템인 '메딕차트'를 이용하여 학교별 기출문제 학습", point: "", schedule: "주 2회 · 600분", enrolled: 0, capacity: 0 },
+    { badge: "고2", highlight: false, title: "학교별 내신 완성", body: "메딕수학 자체 제작교재 및 매쓰플랫을 통한 학생 개별관리 시스템으로 정확한 개념 진도를 나가며, 메딕수학 자체 개발 학교별 기출분석 시스템인 '메딕차트'를 이용하여 학교별 기출문제 학습", point: "", schedule: "주 2회 · 600분", enrolled: 0, capacity: 0 },
+    { badge: "고3", highlight: true, title: "4개월 수능대비 특강", body: "기출문제들을 정확하게 분석하여 수능에서 가져야할 관점들을 새워주고 연습시킵니다.", point: "", schedule: "주 2회 · 600분", enrolled: 0, capacity: 0 },
   ],
   teachers: [
     { name: "[이름] 원장", grades: "[담당 학년]", career: "[학력·주요 약력]", photo: "" },
