@@ -374,8 +374,8 @@ export default async function Home() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
             {site.cases.map((c, i) => (
               <Reveal as="article" key={i} delay={i * 120} className="flex flex-col gap-5 rounded-lg border border-line bg-white p-6 md:p-8">
-                <div className="flex items-center justify-between gap-3 text-sm">
-                  <span className="font-semibold">{c.who}</span>
+                <div className="flex flex-col gap-1 text-sm">
+                  <span className="text-[15px] font-semibold md:text-base">{c.who}</span>
                   <span className="text-muted">{c.exam}</span>
                 </div>
                 {(c.before || c.after) && (
