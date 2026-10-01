@@ -213,21 +213,6 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
 
   return (
     <div className="flex flex-col gap-5 pb-28">
-      <Section title="학원 소개">
-        <Field label="제목" hint="크게 보이는 첫 문장">
-          <input className={inputCls} value={c.about.headline} onChange={(e) => set("about", { ...c.about, headline: e.target.value })} />
-        </Field>
-        <Field label="부제">
-          <input className={inputCls} value={c.about.subtitle} onChange={(e) => set("about", { ...c.about, subtitle: e.target.value })} />
-        </Field>
-        <Field label="본문" hint="문단 사이는 한 줄 비우기(엔터 두 번)">
-          <textarea className={areaCls + " h-48"} value={c.about.body} onChange={(e) => set("about", { ...c.about, body: e.target.value })} />
-        </Field>
-        <Field label="강조 문장" hint="본문 아래 빨간 글씨로 크게 · 비우면 안 보여요">
-          <input className={inputCls} value={c.about.highlight} onChange={(e) => set("about", { ...c.about, highlight: e.target.value })} />
-        </Field>
-      </Section>
-
       <Section title="기본 정보">
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="전화번호" hint="넣으면 모바일 전화 버튼이 켜져요">
@@ -255,6 +240,133 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
         <HeroPhotos value={c.heroPhotos} onChange={(v) => set("heroPhotos", v)} />
       </Section>
 
+      <Section title="강사진 위 이야기 (누가 가르치나)">
+        <p className="-mt-2 text-sm text-muted">강사진 카드 위에 크게 보여요. 제목을 비우면 이 상자가 사라져요.</p>
+        <Field label="제목">
+          <input className={inputCls} value={c.teacherStory.title} onChange={(e) => set("teacherStory", { ...c.teacherStory, title: e.target.value })} />
+        </Field>
+        <Field label="본문" hint="빈 줄로 문단을 나눠요">
+          <textarea className={areaCls} value={c.teacherStory.body} onChange={(e) => set("teacherStory", { ...c.teacherStory, body: e.target.value })} />
+        </Field>
+        <Field label="핵심 사실" hint="한 줄에 하나씩 · 최대 5줄">
+          <textarea
+            className={areaCls}
+            value={c.teacherStory.facts.join("\n")}
+            onChange={(e) => set("teacherStory", { ...c.teacherStory, facts: e.target.value.split("\n").slice(0, 5) })}
+          />
+        </Field>
+        <Field label="자세히 보기 링크" hint="블로그 글 주소 · 비우면 안 보여요">
+          <input className={inputCls} value={c.teacherStory.link} onChange={(e) => set("teacherStory", { ...c.teacherStory, link: e.target.value })} />
+        </Field>
+      </Section>
+
+      <Section title="강사진">
+        {c.teachers.map((t: Teacher, i) => (
+          <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold">강사 {i + 1}</span>
+              <ListControls
+                canUp={i > 0}
+                canDown={i < c.teachers.length - 1}
+                onUp={() => set("teachers", move(c.teachers, i, -1))}
+                onDown={() => set("teachers", move(c.teachers, i, 1))}
+                onRemove={() => set("teachers", c.teachers.filter((_, j) => j !== i))}
+              />
+            </div>
+            <div className="flex flex-col gap-4 md:flex-row">
+              <PhotoPicker label="사진" value={t.photo} onChange={(v) => setItem("teachers", i, { photo: v })} aspect="h-[120px] w-[94px]" />
+              <div className="grid flex-1 gap-3 md:grid-cols-2">
+                <Field label="이름" hint="예: 홍길동 원장">
+                  <input className={inputCls} value={t.name} onChange={(e) => setItem("teachers", i, { name: e.target.value })} />
+                </Field>
+                <Field label="담당 학년">
+                  <input className={inputCls} value={t.grades} onChange={(e) => setItem("teachers", i, { grades: e.target.value })} />
+                </Field>
+                <div className="md:col-span-2">
+                  <Field label="학력·약력">
+                    <textarea className={areaCls} value={t.career} onChange={(e) => setItem("teachers", i, { career: e.target.value })} />
+                  </Field>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+        {c.teachers.length < 12 && (
+          <button
+            type="button"
+            className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
+            onClick={() => set("teachers", [...c.teachers, { name: "", grades: "", career: "", photo: "" }])}
+          >
+            + 강사 추가
+          </button>
+        )}
+      </Section>
+
+      <Section title="성적 향상 사례">
+        <p className="-mt-2 text-sm text-muted">사이트에 &ldquo;이전 → 이후&rdquo; 성적이 크게 보여요. 학생 이름은 쓰지 말고 학교·학년 정도만 적어 주세요.</p>
+        {c.cases.map((k: Case, i) => (
+          <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold">사례 {i + 1}</span>
+              <ListControls
+                canUp={i > 0}
+                canDown={i < c.cases.length - 1}
+                onUp={() => set("cases", move(c.cases, i, -1))}
+                onDown={() => set("cases", move(c.cases, i, 1))}
+                onRemove={() => set("cases", c.cases.filter((_, j) => j !== i))}
+              />
+            </div>
+            <div className="grid gap-3 md:grid-cols-2">
+              <Field label="학생" hint="예: 중앙고 2학년">
+                <input className={inputCls} value={k.who} onChange={(e) => setItem("cases", i, { who: e.target.value })} />
+              </Field>
+              <Field label="시험" hint="예: 1학기 기말">
+                <input className={inputCls} value={k.exam} onChange={(e) => setItem("cases", i, { exam: e.target.value })} />
+              </Field>
+              <Field label="이전 성적" hint="예: 4등급, 62점">
+                <input className={inputCls} value={k.before} onChange={(e) => setItem("cases", i, { before: e.target.value })} />
+              </Field>
+              <Field label="이후 성적" hint="예: 2등급, 91점">
+                <input className={inputCls} value={k.after} onChange={(e) => setItem("cases", i, { after: e.target.value })} />
+              </Field>
+              <Field label="걸린 기간" hint="예: 3개월 · 비우면 안 보여요">
+                <input className={inputCls} value={k.period} onChange={(e) => setItem("cases", i, { period: e.target.value })} />
+              </Field>
+            </div>
+            <Field label="한마디" hint="무엇을 바꿨는지 · 비우면 안 보여요">
+              <input className={inputCls} value={k.note} onChange={(e) => setItem("cases", i, { note: e.target.value })} />
+            </Field>
+            <Field label="자세히 보기 링크" hint="블로그 글 주소(https://…) · 비우면 안 보여요">
+              <input className={inputCls} value={k.link} placeholder="https://blog.naver.com/…" onChange={(e) => setItem("cases", i, { link: e.target.value })} />
+            </Field>
+          </div>
+        ))}
+        {c.cases.length < 8 && (
+          <button
+            type="button"
+            className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
+            onClick={() => set("cases", [...c.cases, { who: "", exam: "", before: "", after: "", period: "", note: "", link: "" }])}
+          >
+            + 사례 추가
+          </button>
+        )}
+      </Section>
+
+      <Section title="학원 소개">
+        <Field label="제목" hint="크게 보이는 첫 문장">
+          <input className={inputCls} value={c.about.headline} onChange={(e) => set("about", { ...c.about, headline: e.target.value })} />
+        </Field>
+        <Field label="부제">
+          <input className={inputCls} value={c.about.subtitle} onChange={(e) => set("about", { ...c.about, subtitle: e.target.value })} />
+        </Field>
+        <Field label="본문" hint="문단 사이는 한 줄 비우기(엔터 두 번)">
+          <textarea className={areaCls + " h-48"} value={c.about.body} onChange={(e) => set("about", { ...c.about, body: e.target.value })} />
+        </Field>
+        <Field label="강조 문장" hint="본문 아래 빨간 글씨로 크게 · 비우면 안 보여요">
+          <input className={inputCls} value={c.about.highlight} onChange={(e) => set("about", { ...c.about, highlight: e.target.value })} />
+        </Field>
+      </Section>
+
       <Section title="학원 원칙">
         {c.rules.map((r: Rule, i) => (
           <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
@@ -279,36 +391,6 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
         {c.rules.length < 6 && (
           <button type="button" className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm" onClick={() => set("rules", [...c.rules, { title: "", body: "" }])}>
             + 원칙 추가
-          </button>
-        )}
-      </Section>
-
-      <Section title="입학 절차">
-        {c.steps.map((s: Step, i) => (
-          <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-brand">STEP {i + 1}</span>
-              <ListControls
-                canUp={i > 0}
-                canDown={i < c.steps.length - 1}
-                onUp={() => set("steps", move(c.steps, i, -1))}
-                onDown={() => set("steps", move(c.steps, i, 1))}
-                onRemove={() => set("steps", c.steps.filter((_, j) => j !== i))}
-              />
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              <Field label="단계 이름">
-                <input className={inputCls} value={s.title} onChange={(e) => setItem("steps", i, { title: e.target.value })} />
-              </Field>
-              <Field label="설명">
-                <input className={inputCls} value={s.body} onChange={(e) => setItem("steps", i, { body: e.target.value })} />
-              </Field>
-            </div>
-          </div>
-        ))}
-        {c.steps.length < 8 && (
-          <button type="button" className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm" onClick={() => set("steps", [...c.steps, { title: "", body: "" }])}>
-            + 단계 추가
           </button>
         )}
       </Section>
@@ -395,68 +477,6 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
         )}
       </Section>
 
-      <Section title="강사진 위 이야기 (누가 가르치나)">
-        <p className="-mt-2 text-sm text-muted">강사진 카드 위에 크게 보여요. 제목을 비우면 이 상자가 사라져요.</p>
-        <Field label="제목">
-          <input className={inputCls} value={c.teacherStory.title} onChange={(e) => set("teacherStory", { ...c.teacherStory, title: e.target.value })} />
-        </Field>
-        <Field label="본문" hint="빈 줄로 문단을 나눠요">
-          <textarea className={areaCls} value={c.teacherStory.body} onChange={(e) => set("teacherStory", { ...c.teacherStory, body: e.target.value })} />
-        </Field>
-        <Field label="핵심 사실" hint="한 줄에 하나씩 · 최대 5줄">
-          <textarea
-            className={areaCls}
-            value={c.teacherStory.facts.join("\n")}
-            onChange={(e) => set("teacherStory", { ...c.teacherStory, facts: e.target.value.split("\n").slice(0, 5) })}
-          />
-        </Field>
-        <Field label="자세히 보기 링크" hint="블로그 글 주소 · 비우면 안 보여요">
-          <input className={inputCls} value={c.teacherStory.link} onChange={(e) => set("teacherStory", { ...c.teacherStory, link: e.target.value })} />
-        </Field>
-      </Section>
-
-      <Section title="강사진">
-        {c.teachers.map((t: Teacher, i) => (
-          <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">강사 {i + 1}</span>
-              <ListControls
-                canUp={i > 0}
-                canDown={i < c.teachers.length - 1}
-                onUp={() => set("teachers", move(c.teachers, i, -1))}
-                onDown={() => set("teachers", move(c.teachers, i, 1))}
-                onRemove={() => set("teachers", c.teachers.filter((_, j) => j !== i))}
-              />
-            </div>
-            <div className="flex flex-col gap-4 md:flex-row">
-              <PhotoPicker label="사진" value={t.photo} onChange={(v) => setItem("teachers", i, { photo: v })} aspect="h-[120px] w-[94px]" />
-              <div className="grid flex-1 gap-3 md:grid-cols-2">
-                <Field label="이름" hint="예: 홍길동 원장">
-                  <input className={inputCls} value={t.name} onChange={(e) => setItem("teachers", i, { name: e.target.value })} />
-                </Field>
-                <Field label="담당 학년">
-                  <input className={inputCls} value={t.grades} onChange={(e) => setItem("teachers", i, { grades: e.target.value })} />
-                </Field>
-                <div className="md:col-span-2">
-                  <Field label="학력·약력">
-                    <textarea className={areaCls} value={t.career} onChange={(e) => setItem("teachers", i, { career: e.target.value })} />
-                  </Field>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-        {c.teachers.length < 12 && (
-          <button
-            type="button"
-            className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
-            onClick={() => set("teachers", [...c.teachers, { name: "", grades: "", career: "", photo: "" }])}
-          >
-            + 강사 추가
-          </button>
-        )}
-      </Section>
-
       <Section title="교습비 안내 (교습비 등 게시표)">
         <p className="-mt-2 text-sm text-muted">교육청에 등록한 값 그대로 적어 주세요. 법적으로 홈페이지에 표시해야 해서, 사이트 맨 아래에 작은 글씨로 보여요.</p>
         {c.tuition.rows.map((t, i) => (
@@ -497,52 +517,32 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
         </div>
       </Section>
 
-      <Section title="성적 향상 사례">
-        <p className="-mt-2 text-sm text-muted">사이트에 &ldquo;이전 → 이후&rdquo; 성적이 크게 보여요. 학생 이름은 쓰지 말고 학교·학년 정도만 적어 주세요.</p>
-        {c.cases.map((k: Case, i) => (
+      <Section title="입학 절차">
+        {c.steps.map((s: Step, i) => (
           <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">사례 {i + 1}</span>
+              <span className="text-sm font-semibold text-brand">STEP {i + 1}</span>
               <ListControls
                 canUp={i > 0}
-                canDown={i < c.cases.length - 1}
-                onUp={() => set("cases", move(c.cases, i, -1))}
-                onDown={() => set("cases", move(c.cases, i, 1))}
-                onRemove={() => set("cases", c.cases.filter((_, j) => j !== i))}
+                canDown={i < c.steps.length - 1}
+                onUp={() => set("steps", move(c.steps, i, -1))}
+                onDown={() => set("steps", move(c.steps, i, 1))}
+                onRemove={() => set("steps", c.steps.filter((_, j) => j !== i))}
               />
             </div>
             <div className="grid gap-3 md:grid-cols-2">
-              <Field label="학생" hint="예: 중앙고 2학년">
-                <input className={inputCls} value={k.who} onChange={(e) => setItem("cases", i, { who: e.target.value })} />
+              <Field label="단계 이름">
+                <input className={inputCls} value={s.title} onChange={(e) => setItem("steps", i, { title: e.target.value })} />
               </Field>
-              <Field label="시험" hint="예: 1학기 기말">
-                <input className={inputCls} value={k.exam} onChange={(e) => setItem("cases", i, { exam: e.target.value })} />
-              </Field>
-              <Field label="이전 성적" hint="예: 4등급, 62점">
-                <input className={inputCls} value={k.before} onChange={(e) => setItem("cases", i, { before: e.target.value })} />
-              </Field>
-              <Field label="이후 성적" hint="예: 2등급, 91점">
-                <input className={inputCls} value={k.after} onChange={(e) => setItem("cases", i, { after: e.target.value })} />
-              </Field>
-              <Field label="걸린 기간" hint="예: 3개월 · 비우면 안 보여요">
-                <input className={inputCls} value={k.period} onChange={(e) => setItem("cases", i, { period: e.target.value })} />
+              <Field label="설명">
+                <input className={inputCls} value={s.body} onChange={(e) => setItem("steps", i, { body: e.target.value })} />
               </Field>
             </div>
-            <Field label="한마디" hint="무엇을 바꿨는지 · 비우면 안 보여요">
-              <input className={inputCls} value={k.note} onChange={(e) => setItem("cases", i, { note: e.target.value })} />
-            </Field>
-            <Field label="자세히 보기 링크" hint="블로그 글 주소(https://…) · 비우면 안 보여요">
-              <input className={inputCls} value={k.link} placeholder="https://blog.naver.com/…" onChange={(e) => setItem("cases", i, { link: e.target.value })} />
-            </Field>
           </div>
         ))}
-        {c.cases.length < 8 && (
-          <button
-            type="button"
-            className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
-            onClick={() => set("cases", [...c.cases, { who: "", exam: "", before: "", after: "", period: "", note: "", link: "" }])}
-          >
-            + 사례 추가
+        {c.steps.length < 8 && (
+          <button type="button" className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm" onClick={() => set("steps", [...c.steps, { title: "", body: "" }])}>
+            + 단계 추가
           </button>
         )}
       </Section>
