@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import type { SiteContent, Teacher, Review, Program, Rule, Step } from "@/lib/site";
+import type { SiteContent, Teacher, Case, Program, Rule, Step } from "@/lib/site";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import { saveContent } from "../../actions";
 
@@ -43,6 +43,83 @@ async function shrink(file: File): Promise<Blob> {
   return await new Promise((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error("변환 실패"))), "image/jpeg", 0.85));
 }
 
+// 사진 1장을 검사·축소해서 Supabase 저장소(site-images)에 올리고 공개 주소를 돌려준다.
+async function uploadPhoto(file: File): Promise<string> {
+  if (!/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type)) throw new Error("JPG, PNG, WEBP 사진만 올릴 수 있어요.");
+  if (file.size > 20 * 1024 * 1024) throw new Error("20MB 이하 사진만 올릴 수 있어요.");
+  const blob = await shrink(file);
+  const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.jpg`;
+  const supabase = createBrowserSupabase();
+  const { error } = await supabase.storage.from("site-images").upload(path, blob, { contentType: "image/jpeg", upsert: false });
+  if (error) throw error;
+  return supabase.storage.from("site-images").getPublicUrl(path).data.publicUrl;
+}
+
+// 첫 화면 사진 여러 장 — 순서대로 자동 슬라이드된다.
+function HeroPhotos({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+  const [busy, setBusy] = useState(0);
+  const [err, setErr] = useState("");
+  const MAX_PHOTOS = 10;
+
+  async function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []).slice(0, MAX_PHOTOS - value.length);
+    e.target.value = "";
+    if (files.length === 0) return;
+    setErr("");
+    setBusy(files.length);
+    const added: string[] = [];
+    for (const f of files) {
+      try {
+        added.push(await uploadPhoto(f));
+      } catch (e2) {
+        setErr(`${f.name}: ` + (e2 instanceof Error ? e2.message : "올리지 못했습니다"));
+      }
+      setBusy((n) => n - 1);
+    }
+    if (added.length) onChange([...value, ...added]);
+  }
+
+  const btn = "h-8 w-8 rounded border border-line bg-white text-sm hover:border-ink disabled:opacity-40";
+  return (
+    <div className="flex flex-col gap-2 text-sm font-semibold">
+      <span>
+        첫 화면 사진 (자습실·수업)
+        <span className="ml-2 font-normal text-muted">여러 장이면 5초마다 자동으로 넘어가요 · 최대 {MAX_PHOTOS}장 · 첫 장이 맨 먼저</span>
+      </span>
+      <div className="flex flex-wrap gap-3">
+        {value.map((src, i) => (
+          <div key={src + i} className="flex flex-col gap-1.5">
+            <div className="relative h-[100px] w-[140px] overflow-hidden rounded border border-line bg-sand">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={src} alt="" className="h-full w-full object-cover" />
+              <span className="absolute left-1 top-1 rounded bg-black/60 px-1.5 text-xs text-white">{i + 1}</span>
+            </div>
+            <div className="flex gap-1">
+              <button type="button" className={btn} aria-label="앞으로" disabled={i === 0} onClick={() => onChange(move(value, i, -1))}>
+                ←
+              </button>
+              <button type="button" className={btn} aria-label="뒤로" disabled={i === value.length - 1} onClick={() => onChange(move(value, i, 1))}>
+                →
+              </button>
+              <button type="button" className={btn + " text-brand"} aria-label="이 사진 빼기" onClick={() => onChange(value.filter((_, j) => j !== i))}>
+                ✕
+              </button>
+            </div>
+          </div>
+        ))}
+        {value.length < MAX_PHOTOS && (
+          <label className="flex h-[100px] w-[140px] cursor-pointer flex-col items-center justify-center gap-1 rounded border border-dashed border-ink text-center text-sm hover:bg-sand">
+            {busy > 0 ? `올리는 중… (${busy})` : "+ 사진 추가"}
+            <span className="text-xs font-normal text-muted">여러 장 선택 가능</span>
+            <input type="file" accept="image/*" multiple className="sr-only" onChange={onFiles} disabled={busy > 0} />
+          </label>
+        )}
+      </div>
+      {err && <span className="font-normal text-brand">{err}</span>}
+    </div>
+  );
+}
+
 function PhotoPicker({ value, onChange, label, aspect }: { value: string; onChange: (url: string) => void; label: string; aspect: string }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
@@ -51,24 +128,10 @@ function PhotoPicker({ value, onChange, label, aspect }: { value: string; onChan
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
-    if (!/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type)) {
-      setErr("JPG, PNG, WEBP 사진만 올릴 수 있어요.");
-      return;
-    }
-    if (file.size > 20 * 1024 * 1024) {
-      setErr("20MB 이하 사진만 올릴 수 있어요.");
-      return;
-    }
     setBusy(true);
     setErr("");
     try {
-      const blob = await shrink(file);
-      const path = `${new Date().toISOString().slice(0, 10)}/${crypto.randomUUID()}.jpg`;
-      const supabase = createBrowserSupabase();
-      const { error } = await supabase.storage.from("site-images").upload(path, blob, { contentType: "image/jpeg", upsert: false });
-      if (error) throw error;
-      const { data } = supabase.storage.from("site-images").getPublicUrl(path);
-      onChange(data.publicUrl);
+      onChange(await uploadPhoto(file));
     } catch (e2) {
       setErr("올리지 못했습니다: " + (e2 instanceof Error ? e2.message : "알 수 없는 오류"));
     } finally {
@@ -141,7 +204,7 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
     setDirty(true);
     setMsg(null);
   }
-  function setItem<K extends "rules" | "steps" | "programs" | "teachers" | "reviews">(key: K, i: number, patch: Partial<SiteContent[K][number]>) {
+  function setItem<K extends "rules" | "steps" | "programs" | "teachers" | "cases">(key: K, i: number, patch: Partial<SiteContent[K][number]>) {
     set(key, (c[key] as SiteContent[K][number][]).map((x, j) => (j === i ? { ...x, ...patch } : x)) as SiteContent[K]);
   }
 
@@ -187,7 +250,7 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
             <input className={inputCls} value={c.privacyRetention} onChange={(e) => set("privacyRetention", e.target.value)} placeholder="예: 1년" />
           </Field>
         </div>
-        <PhotoPicker label="첫 화면 사진 (자습실·수업 사진)" value={c.heroPhoto} onChange={(v) => set("heroPhoto", v)} aspect="h-[120px] w-[160px]" />
+        <HeroPhotos value={c.heroPhotos} onChange={(v) => set("heroPhotos", v)} />
       </Section>
 
       <Section title="학원 원칙">
@@ -366,30 +429,49 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
         )}
       </Section>
 
-      <Section title="수강 후기">
-        {c.reviews.map((r: Review, i) => (
+      <Section title="성적 향상 사례">
+        <p className="-mt-2 text-sm text-muted">사이트에 &ldquo;이전 → 이후&rdquo; 성적이 크게 보여요. 학생 이름은 쓰지 말고 학교·학년 정도만 적어 주세요.</p>
+        {c.cases.map((k: Case, i) => (
           <div key={i} className="flex flex-col gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0">
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold">후기 {i + 1}</span>
+              <span className="text-sm font-semibold">사례 {i + 1}</span>
               <ListControls
                 canUp={i > 0}
-                canDown={i < c.reviews.length - 1}
-                onUp={() => set("reviews", move(c.reviews, i, -1))}
-                onDown={() => set("reviews", move(c.reviews, i, 1))}
-                onRemove={() => set("reviews", c.reviews.filter((_, j) => j !== i))}
+                canDown={i < c.cases.length - 1}
+                onUp={() => set("cases", move(c.cases, i, -1))}
+                onDown={() => set("cases", move(c.cases, i, 1))}
+                onRemove={() => set("cases", c.cases.filter((_, j) => j !== i))}
               />
             </div>
-            <Field label="후기 내용">
-              <textarea className={areaCls} value={r.quote} onChange={(e) => setItem("reviews", i, { quote: e.target.value })} />
-            </Field>
-            <Field label="작성자" hint="예: 중앙고 2학년 학생">
-              <input className={inputCls} value={r.who} onChange={(e) => setItem("reviews", i, { who: e.target.value })} />
+            <div className="grid gap-3 md:grid-cols-2">
+              <Field label="학생" hint="예: 중앙고 2학년">
+                <input className={inputCls} value={k.who} onChange={(e) => setItem("cases", i, { who: e.target.value })} />
+              </Field>
+              <Field label="시험" hint="예: 1학기 기말">
+                <input className={inputCls} value={k.exam} onChange={(e) => setItem("cases", i, { exam: e.target.value })} />
+              </Field>
+              <Field label="이전 성적" hint="예: 4등급, 62점">
+                <input className={inputCls} value={k.before} onChange={(e) => setItem("cases", i, { before: e.target.value })} />
+              </Field>
+              <Field label="이후 성적" hint="예: 2등급, 91점">
+                <input className={inputCls} value={k.after} onChange={(e) => setItem("cases", i, { after: e.target.value })} />
+              </Field>
+              <Field label="걸린 기간" hint="예: 3개월 · 비우면 안 보여요">
+                <input className={inputCls} value={k.period} onChange={(e) => setItem("cases", i, { period: e.target.value })} />
+              </Field>
+            </div>
+            <Field label="한마디" hint="무엇을 바꿨는지 · 비우면 안 보여요">
+              <input className={inputCls} value={k.note} onChange={(e) => setItem("cases", i, { note: e.target.value })} />
             </Field>
           </div>
         ))}
-        {c.reviews.length < 12 && (
-          <button type="button" className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm" onClick={() => set("reviews", [...c.reviews, { quote: "", who: "" }])}>
-            + 후기 추가
+        {c.cases.length < 8 && (
+          <button
+            type="button"
+            className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
+            onClick={() => set("cases", [...c.cases, { who: "", exam: "", before: "", after: "", period: "", note: "" }])}
+          >
+            + 사례 추가
           </button>
         )}
       </Section>

@@ -14,7 +14,7 @@ export default function Header() {
           <Image src="/logo.png" alt="메딕수학 MEDIC MATH ACADEMY" width={219} height={44} priority className="h-[30px] w-auto md:h-[44px]" />
         </a>
 
-        <nav className="hidden gap-10 text-base font-medium lg:flex" aria-label="주요 메뉴">
+        <nav className="hidden gap-7 text-base font-medium lg:flex xl:gap-10" aria-label="주요 메뉴">
           {nav.map((n) => (
             <a key={n.href} href={n.href} className="hover:text-brand">
               {n.label}

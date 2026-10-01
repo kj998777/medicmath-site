@@ -74,6 +74,12 @@ export function sanitizeContent(raw: unknown): SiteContent {
     address: str(r.address, d.address, MAX.mid),
     mapUrl: httpUrl(r.mapUrl) || d.mapUrl,
     heroPhoto: photo(r.heroPhoto),
+    heroPhotos: (() => {
+      const arr = Array.isArray(r.heroPhotos) ? r.heroPhotos.map(photo).filter(Boolean).slice(0, 10) : [];
+      // 예전에 1장만 저장해 둔 경우에도 슬라이드 첫 장으로 이어 쓴다.
+      if (arr.length === 0 && photo(r.heroPhoto)) arr.push(photo(r.heroPhoto));
+      return arr;
+    })(),
     privacyRetention: str(r.privacyRetention, d.privacyRetention, MAX.short),
     business: {
       owner: str(biz.owner, d.business.owner, MAX.short),
@@ -97,6 +103,14 @@ export function sanitizeContent(raw: unknown): SiteContent {
       grades: str(x.grades, "", MAX.short),
       career: str(x.career, "", MAX.long),
       photo: photo(x.photo),
+    })),
+    cases: list(r.cases, 8, d.cases, (x) => ({
+      who: str(x.who, "", MAX.short),
+      exam: str(x.exam, "", MAX.short),
+      before: str(x.before, "", 20),
+      after: str(x.after, "", 20),
+      period: str(x.period, "", 30),
+      note: str(x.note, "", MAX.mid),
     })),
     reviews: list(r.reviews, LIMITS.reviews, d.reviews, (x) => ({ quote: str(x.quote, "", MAX.long), who: str(x.who, "", MAX.short) })),
   };

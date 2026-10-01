@@ -33,3 +33,92 @@ body {
   @apply flex items-center justify-center border-[1.5px] border-dashed text-sm md:text-base;
 }
 }
+
+/* ── 애니메이션 (애플 홈페이지 느낌: 느리게 시작해 부드럽게 멈추는 곡선) ── */
+:root {
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 스크롤해서 보일 때 떠오르기 — 자바스크립트가 켜진 경우에만 처음에 숨긴다 */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(48px) scale(0.985);
+  transition:
+    opacity 0.9s var(--ease-out-soft),
+    transform 1.2s var(--ease-out-soft);
+  will-change: opacity, transform;
+}
+.js .reveal.is-shown {
+  opacity: 1;
+  transform: none;
+}
+
+/* 첫 화면 문구: 줄마다 차례로 올라오기 */
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(36px);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+.hero-rise {
+  animation: hero-rise 1.2s var(--ease-out-soft) both;
+}
+
+/* 사진 슬라이드: 서서히 겹쳐 바뀌고 천천히 확대 */
+@keyframes ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+.slide-img {
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+}
+.slide-img.is-active {
+  opacity: 1;
+  animation: ken-burns 7s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal,
+  .js .reveal.is-shown {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-rise,
+  .slide-img.is-active {
+    animation: none;
+  }
+  .slide-img {
+    transition: opacity 0.3s linear;
+  }
+}
+
+/* 보고서 그림의 막대: 보이면 왼쪽에서 자라남 */
+.js .reveal .bar-grow {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.4s var(--ease-out-soft) 0.35s;
+}
+.js .reveal.is-shown .bar-grow {
+  transform: scaleX(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal .bar-grow {
+    transform: none;
+    transition: none;
+  }
+}

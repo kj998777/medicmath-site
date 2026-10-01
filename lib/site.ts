@@ -8,6 +8,8 @@ export type Step = { title: string; body: string };
 export type Program = { badge: string; highlight: boolean; title: string; body: string; schedule: string; enrolled: number; capacity: number };
 export type Teacher = { name: string; grades: string; career: string; photo: string };
 export type Review = { quote: string; who: string };
+// 성적 향상 사례: 누가(학교·학년) / 어떤 시험 / 이전 → 이후 / 걸린 기간 / 한마디
+export type Case = { who: string; exam: string; before: string; after: string; period: string; note: string };
 
 // 학원 소개: 제목(큰 글씨), 부제, 본문(빈 줄로 문단 구분), 강조 문장(본문 중 크게 따로 보여줄 한 줄)
 export type About = { headline: string; subtitle: string; body: string; highlight: string };
@@ -20,7 +22,8 @@ export type SiteContent = {
   replyWithin: string;
   address: string;
   mapUrl: string;
-  heroPhoto: string;
+  heroPhoto: string; // (예전 1장짜리 — heroPhotos가 비어 있을 때만 사용)
+  heroPhotos: string[];
   privacyRetention: string;
   business: { owner: string; bizNo: string; academyNo: string };
   links: { blog: string; instagram: string; kakao: string };
@@ -29,6 +32,7 @@ export type SiteContent = {
   programs: Program[];
   teachers: Teacher[];
   reviews: Review[];
+  cases: Case[];
 };
 
 export const defaultContent: SiteContent = {
@@ -39,12 +43,13 @@ export const defaultContent: SiteContent = {
     highlight: "효율의 차이가 곧 성적의 차이입니다.",
   },
   tagline: "제주시 중·고등 수학 전문",
-  phone: "",
+  phone: "064-702-3455",
   hours: "[운영 시간 — 예: 평일 00:00–00:00]",
   replyWithin: "[영업일 기준 1일]",
   address: "제주특별자치도 제주시 중앙로 312, 2층",
   mapUrl: "https://map.naver.com/p/search/" + encodeURIComponent("제주시 중앙로 312"),
   heroPhoto: "",
+  heroPhotos: [],
   privacyRetention: "[보관 기간]",
   business: { owner: "[이름]", bizNo: "[000-00-00000]", academyNo: "[제0000호]" },
   links: { blog: "", instagram: "", kakao: "" },
@@ -74,6 +79,11 @@ export const defaultContent: SiteContent = {
     { quote: "[실제 수강 후기]", who: "[학교 · 학년] 학생" },
     { quote: "[실제 수강 후기]", who: "[학교 · 학년] 학부모" },
   ],
+  cases: [
+    { who: "[학교] 고2", exam: "[1학기 기말]", before: "[4등급]", after: "[2등급]", period: "[3개월]", note: "[무엇을 바꿨는지 한 줄 — 예: 오답 단원별 재풀이]" },
+    { who: "[학교] 중3", exam: "[2학기 중간]", before: "[62점]", after: "[91점]", period: "[1학기]", note: "[무엇을 바꿨는지 한 줄]" },
+    { who: "[학교] 고1", exam: "[3월 모의고사]", before: "[5등급]", after: "[3등급]", period: "[4개월]", note: "[무엇을 바꿨는지 한 줄]" },
+  ],
 };
 
 export const nav = [
@@ -81,6 +91,7 @@ export const nav = [
   { href: "#rules", label: "학원 원칙" },
   { href: "#admission", label: "입학 안내" },
   { href: "#programs", label: "수업 안내" },
-  { href: "#teachers", label: "강사진" },
+  { href: "#medicchart", label: "메딕차트" },
+  { href: "#cases", label: "향상 사례" },
   { href: "#location", label: "오시는 길" },
 ];
