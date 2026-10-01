@@ -463,13 +463,16 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
             <Field label="한마디" hint="무엇을 바꿨는지 · 비우면 안 보여요">
               <input className={inputCls} value={k.note} onChange={(e) => setItem("cases", i, { note: e.target.value })} />
             </Field>
+            <Field label="자세히 보기 링크" hint="블로그 글 주소(https://…) · 비우면 안 보여요">
+              <input className={inputCls} value={k.link} placeholder="https://blog.naver.com/…" onChange={(e) => setItem("cases", i, { link: e.target.value })} />
+            </Field>
           </div>
         ))}
         {c.cases.length < 8 && (
           <button
             type="button"
             className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
-            onClick={() => set("cases", [...c.cases, { who: "", exam: "", before: "", after: "", period: "", note: "" }])}
+            onClick={() => set("cases", [...c.cases, { who: "", exam: "", before: "", after: "", period: "", note: "", link: "" }])}
           >
             + 사례 추가
           </button>

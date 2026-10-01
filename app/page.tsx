@@ -354,15 +354,30 @@ export default async function Home() {
                   <span className="font-semibold">{c.who}</span>
                   <span className="text-muted">{c.exam}</span>
                 </div>
-                <div className="flex items-end gap-3 font-serif md:gap-4">
-                  <span className="text-[26px] font-bold leading-none text-[#B3A99C] md:text-[30px]">{c.before}</span>
-                  <svg width="28" height="20" viewBox="0 0 28 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1 shrink-0 text-ink" aria-label="에서">
-                    <path d="M2 10h22M17 3l7 7-7 7" />
-                  </svg>
-                  <span className="text-[40px] font-black leading-none text-brand md:text-[48px]">{c.after}</span>
-                </div>
+                {(c.before || c.after) && (
+                  <div className="flex flex-wrap items-end gap-x-3 gap-y-2 font-serif md:gap-x-4">
+                    {c.before && (
+                      <span className={"font-bold leading-tight text-[#B3A99C] " + (c.before.length > 5 ? "text-[19px] md:text-[21px]" : "text-[26px] leading-none md:text-[30px]")}>{c.before}</span>
+                    )}
+                    {c.after && (
+                      <span className="flex items-end gap-3 md:gap-4">
+                        {c.before && (
+                          <svg width="28" height="20" viewBox="0 0 28 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mb-1 shrink-0 text-ink" aria-label="에서">
+                            <path d="M2 10h22M17 3l7 7-7 7" />
+                          </svg>
+                        )}
+                        <span className={"font-black leading-none text-brand " + (c.after.length > 5 ? "text-[30px] md:text-[34px]" : "text-[40px] md:text-[48px]")}>{c.after}</span>
+                      </span>
+                    )}
+                  </div>
+                )}
                 {c.period && <span className="self-start rounded-full bg-sand px-3 py-1 text-xs font-semibold text-muted">{c.period}</span>}
                 {c.note && <p className="text-sm leading-[1.7] text-muted md:text-[15px]">{c.note}</p>}
+                {c.link && (
+                  <a href={c.link} target="_blank" rel="noopener noreferrer" className="mt-auto self-start text-sm font-semibold text-ink underline decoration-brand decoration-2 underline-offset-4 hover:text-brand">
+                    자세히 보기 →
+                  </a>
+                )}
               </Reveal>
             ))}
           </div>

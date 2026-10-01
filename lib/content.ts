@@ -111,6 +111,7 @@ export function sanitizeContent(raw: unknown): SiteContent {
       after: str(x.after, "", 20),
       period: str(x.period, "", 30),
       note: str(x.note, "", MAX.mid),
+      link: httpUrl(x.link),
     })),
     reviews: list(r.reviews, LIMITS.reviews, d.reviews, (x) => ({ quote: str(x.quote, "", MAX.long), who: str(x.who, "", MAX.short) })),
   };
