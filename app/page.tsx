@@ -70,7 +70,7 @@ export default async function Home() {
 
   return (
     <div id="top">
-      <Header />
+      <Header blogHref={site.links.blog} />
 
       <main className="pb-[84px] lg:pb-0">
         {/* HERO */}
@@ -393,6 +393,16 @@ export default async function Home() {
               </Reveal>
             ))}
           </div>
+          {site.links.blog && (
+            <a
+              href={site.links.blog}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="self-start text-[15px] font-semibold text-ink underline decoration-brand decoration-2 underline-offset-4 hover:text-brand md:text-base"
+            >
+              더 많은 사례와 공부법은 메딕수학 블로그에서 →
+            </a>
+          )}
         </section>
 
         {/* TEACHERS */}
