@@ -81,8 +81,8 @@ export const defaultContent: SiteContent = {
     { quote: "[실제 수강 후기]", who: "[학교 · 학년] 학부모" },
   ],
   cases: [
-    { who: "[학년]", exam: "[시험]", before: "[이전]", after: "[이후]", period: "", note: "[블로그 글 내용 한 줄]", link: "https://blog.naver.com/yijean/224321902400" },
-    { who: "[학년]", exam: "[시험]", before: "[이전]", after: "[이후]", period: "", note: "[블로그 글 내용 한 줄]", link: "https://blog.naver.com/yijean/224308616199" },
+    { who: "제주시 중2", exam: "중간고사 → 기말고사", before: "56점", after: "96점", period: "3개월", note: "강의를 더 늘리지 않고, 매일 1시간 스스로 손으로 푸는 시간만 더했습니다.", link: "https://blog.naver.com/yijean/224321902400" },
+    { who: "사대부고 고3", exam: "6월 모의평가 → 수능", before: "84점", after: "96점", period: "4개월", note: "평이한 4점 매일 30문제, 킬러는 하루 3문제를 끝까지 분해. 수능 백분위 99, 서울대·포스텍·제주의대 합격.", link: "https://blog.naver.com/yijean/224308616199" },
     { who: "고1", exam: "1학기 내신", before: "중학교 중상위권", after: "1등급", period: "", note: "중학교 때 중상위권이던 학생이 고등학교 첫 학기 내신에서 안정적으로 1등급을 받았습니다.", link: "" },
   ],
 };
