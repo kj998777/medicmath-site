@@ -9,7 +9,11 @@ export type Program = { badge: string; highlight: boolean; title: string; body: 
 export type Teacher = { name: string; grades: string; career: string; photo: string };
 export type Review = { quote: string; who: string };
 
+// 학원 소개: 제목(큰 글씨), 부제, 본문(빈 줄로 문단 구분), 강조 문장(본문 중 크게 따로 보여줄 한 줄)
+export type About = { headline: string; subtitle: string; body: string; highlight: string };
+
 export type SiteContent = {
+  about: About;
   tagline: string;
   phone: string;
   hours: string;
@@ -28,6 +32,12 @@ export type SiteContent = {
 };
 
 export const defaultContent: SiteContent = {
+  about: {
+    headline: "확실한 개념과 지독한 연습이 만점을 만듭니다.",
+    subtitle: "중·고등부 (최)상위권 수학 전문 — 메딕수학",
+    body: "국어·영어·수학·과학, 여러 과목을 배우지만 정작 '공부하는 법'은 배운 적 있으신가요?\n\n상위권과 하위권을 가르는 건 머리가 아니라 공부의 효율입니다.\n\n메딕수학은 적게 공부하고 최상의 결과를 내는 것, 학습 능력 자체를 키우는 데서 시작합니다.",
+    highlight: "효율의 차이가 곧 성적의 차이입니다.",
+  },
   tagline: "제주시 중·고등 수학 전문",
   phone: "",
   hours: "[운영 시간 — 예: 평일 00:00–00:00]",
@@ -67,6 +77,7 @@ export const defaultContent: SiteContent = {
 };
 
 export const nav = [
+  { href: "#about", label: "학원 소개" },
   { href: "#rules", label: "학원 원칙" },
   { href: "#admission", label: "입학 안내" },
   { href: "#programs", label: "수업 안내" },

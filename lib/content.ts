@@ -58,7 +58,15 @@ export function sanitizeContent(raw: unknown): SiteContent {
   const biz = (r.business && typeof r.business === "object" ? r.business : {}) as Record<string, unknown>;
   const links = (r.links && typeof r.links === "object" ? r.links : {}) as Record<string, unknown>;
 
+  const about = (r.about && typeof r.about === "object" ? r.about : {}) as Record<string, unknown>;
+
   return {
+    about: {
+      headline: str(about.headline, d.about.headline, MAX.mid),
+      subtitle: str(about.subtitle, d.about.subtitle, MAX.mid),
+      body: str(about.body, d.about.body, 2000),
+      highlight: str(about.highlight, d.about.highlight, MAX.mid),
+    },
     tagline: str(r.tagline, d.tagline, MAX.short),
     phone: str(r.phone, d.phone, 20).replace(/[^\d\-+() ]/g, ""),
     hours: str(r.hours, d.hours, MAX.mid),

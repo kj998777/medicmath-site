@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Header from "@/components/Header";
 import AdmissionForm from "@/components/AdmissionForm";
+import MapEmbed from "@/components/MapEmbed";
 import { getContent } from "@/lib/content";
 
 // 관리자 화면에서 저장하면 즉시 갱신(revalidatePath)되고, 그 외에도 5분마다 새로 읽는다.
@@ -110,6 +111,42 @@ export default async function Home() {
                 [자습실 · 수업 사진]
               </div>
             )}
+          </div>
+        </section>
+
+        {/* ABOUT — 학원 소개 */}
+        <section id="about" className="border-b border-line bg-white">
+          <div className={wrap + " grid grid-cols-1 gap-8 py-14 md:gap-12 md:py-24 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-20"}>
+            <div className="flex flex-col gap-4 md:gap-6">
+              <p className="eyebrow">ABOUT MEDIC MATH</p>
+              <h2 className="font-serif text-[32px] font-black leading-[1.3] tracking-[-0.5px] md:text-[48px] md:leading-[1.25] md:tracking-[-1px]">
+                {site.about.headline}
+              </h2>
+              {site.about.subtitle && (
+                <p className="flex items-center gap-3 text-[15px] font-semibold text-muted md:text-[17px]">
+                  <span className="h-[2px] w-6 shrink-0 bg-brand" aria-hidden="true" />
+                  {site.about.subtitle}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col gap-6 md:gap-8 lg:pt-10">
+              <div className="flex flex-col gap-4 text-base leading-[1.85] text-ink/85 md:text-[18px]">
+                {site.about.body
+                  .split(/\n\s*\n/)
+                  .map((para) => para.trim())
+                  .filter(Boolean)
+                  .map((para, i) => (
+                    <p key={i} className="whitespace-pre-line">
+                      {para}
+                    </p>
+                  ))}
+              </div>
+              {site.about.highlight && (
+                <p className="border-t-2 border-ink pt-5 font-serif text-[24px] font-bold leading-[1.4] text-brand md:pt-6 md:text-[30px]">
+                  {site.about.highlight}
+                </p>
+              )}
+            </div>
           </div>
         </section>
 
@@ -265,13 +302,9 @@ export default async function Home() {
             <h2 className="text-xl font-semibold md:hidden">오시는 길</h2>
             {/* 지도: 키 없이 쓰는 구글 지도 임베드. 주소(층수 제외)로 위치를 찾으므로 관리자 화면에서 주소를 바꾸면 지도도 따라 바뀐다. */}
             <div className="overflow-hidden rounded-md border border-line bg-sand md:rounded-lg lg:flex-1">
-              <iframe
+              <MapEmbed
                 title={`메딕수학 위치 지도 — ${site.address}`}
                 src={`https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&hl=ko&z=17&output=embed`}
-                className="block h-[260px] w-full border-0 md:h-[320px] lg:h-full lg:min-h-[360px]"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                allowFullScreen
               />
             </div>
             <div className="grid grid-cols-2 gap-2.5">

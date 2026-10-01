@@ -148,6 +148,21 @@ export default function ContentEditor({ initial }: { initial: SiteContent }) {
 
   return (
     <div className="flex flex-col gap-5 pb-28">
+      <Section title="학원 소개">
+        <Field label="제목" hint="크게 보이는 첫 문장">
+          <input className={inputCls} value={c.about.headline} onChange={(e) => set("about", { ...c.about, headline: e.target.value })} />
+        </Field>
+        <Field label="부제">
+          <input className={inputCls} value={c.about.subtitle} onChange={(e) => set("about", { ...c.about, subtitle: e.target.value })} />
+        </Field>
+        <Field label="본문" hint="문단 사이는 한 줄 비우기(엔터 두 번)">
+          <textarea className={areaCls + " h-48"} value={c.about.body} onChange={(e) => set("about", { ...c.about, body: e.target.value })} />
+        </Field>
+        <Field label="강조 문장" hint="본문 아래 빨간 글씨로 크게 · 비우면 안 보여요">
+          <input className={inputCls} value={c.about.highlight} onChange={(e) => set("about", { ...c.about, highlight: e.target.value })} />
+        </Field>
+      </Section>
+
       <Section title="기본 정보">
         <div className="grid gap-4 md:grid-cols-2">
           <Field label="전화번호" hint="넣으면 모바일 전화 버튼이 켜져요">
