@@ -68,7 +68,7 @@ export const defaultContent: SiteContent = {
   heroPhoto: "",
   heroPhotos: [],
   privacyRetention: "[보관 기간]",
-  business: { owner: "[이름]", bizNo: "[000-00-00000]", academyNo: "제2979호" },
+  business: { owner: "이진", bizNo: "538-97-02143", academyNo: "제2979호" },
   // 2026-10-01: 원장님 네이버 블로그(메딕차트 홍보 배너와 같은 주소). DB 값이 있으면 그 값을 쓴다.
   links: { blog: "https://blog.naver.com/yijean", instagram: "", kakao: "" },
   rules: [
