@@ -124,7 +124,11 @@ export async function getContent(): Promise<SiteContent> {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return defaultContent;
   try {
-    const supabase = createClient(url, key, { auth: { persistSession: false } });
+    // DB를 SQL로 직접 고쳐도 늦어도 1분 안에 반영되도록 읽기 캐시를 60초로 둔다(관리자 저장은 즉시 반영).
+    const supabase = createClient(url, key, {
+      auth: { persistSession: false },
+      global: { fetch: (input, init) => fetch(input, { ...init, next: { revalidate: 60 } }) },
+    });
     const { data, error } = await supabase.from("site_content").select("data").eq("id", "main").maybeSingle();
     if (error || !data) return defaultContent;
     return sanitizeContent(data.data);

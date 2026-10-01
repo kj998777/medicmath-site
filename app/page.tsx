@@ -8,8 +8,8 @@ import PhotoSlideshow from "@/components/PhotoSlideshow";
 import { getMedicStats } from "@/lib/medicStats";
 import { getContent } from "@/lib/content";
 
-// 관리자 화면에서 저장하면 즉시 갱신(revalidatePath)되고, 그 외에도 5분마다 새로 읽는다.
-export const revalidate = 300;
+// 관리자 화면에서 저장하면 즉시 갱신(revalidatePath)되고, 그 외에도 1분마다 새로 읽는다.
+export const revalidate = 60;
 
 function PinIcon() {
   return (

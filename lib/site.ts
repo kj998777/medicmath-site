@@ -46,7 +46,7 @@ export const defaultContent: SiteContent = {
   },
   tagline: "제주시 중·고등 수학 전문",
   phone: "064-702-3455",
-  hours: "[운영 시간 — 예: 평일 00:00–00:00]",
+  hours: "평일 13:00–22:00 · 주말 10:00–22:00",
   replyWithin: "[영업일 기준 1일]",
   address: "제주특별자치도 제주시 중앙로 312, 2층",
   mapUrl: "https://map.naver.com/p/search/" + encodeURIComponent("제주시 중앙로 312"),
