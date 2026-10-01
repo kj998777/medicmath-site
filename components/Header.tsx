@@ -4,7 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { nav } from "@/lib/site";
 
-export default function Header() {
+// 2026-10-01: 블로그(새 창) 메뉴 — 주소는 사이트 내용(links.blog)에서 받는다. 비어 있으면 메뉴에 안 보임.
+export default function Header({ blogHref = "" }: { blogHref?: string }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,6 +21,11 @@ export default function Header() {
               {n.label}
             </a>
           ))}
+          {blogHref && (
+            <a href={blogHref} target="_blank" rel="noopener noreferrer" className="hover:text-brand">
+              블로그
+            </a>
+          )}
         </nav>
 
         <a
@@ -56,6 +62,17 @@ export default function Header() {
               {n.label}
             </a>
           ))}
+          {blogHref && (
+            <a
+              href={blogHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+              className="block border-b border-line px-5 py-4 text-base font-medium"
+            >
+              블로그 ↗
+            </a>
+          )}
           <div className="p-5">
             <a
               href="#consult"
