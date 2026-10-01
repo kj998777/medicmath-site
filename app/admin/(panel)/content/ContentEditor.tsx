@@ -336,6 +336,9 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
               <Field label="강조 문구" hint="예: 고등 선행 포함 · 카드에 빨간 띠로 크게 · 비우면 안 보여요">
                 <input className={inputCls} value={p.point} onChange={(e) => setItem("programs", i, { point: e.target.value })} />
               </Field>
+              <Field label="교습비" hint="예: 월 350,000원 · 비우면 안 보여요">
+                <input className={inputCls} value={p.fee} onChange={(e) => setItem("programs", i, { fee: e.target.value })} />
+              </Field>
               <Field label="수업 횟수·시간" hint="예: 주 3회 · 150분">
                 <input className={inputCls} value={p.schedule} onChange={(e) => setItem("programs", i, { schedule: e.target.value })} />
               </Field>
@@ -385,7 +388,7 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
           <button
             type="button"
             className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
-            onClick={() => set("programs", [...c.programs, { badge: "", highlight: false, title: "", body: "", point: "", schedule: "", enrolled: 0, capacity: 0 }])}
+            onClick={() => set("programs", [...c.programs, { badge: "", highlight: false, title: "", body: "", point: "", schedule: "", fee: "", enrolled: 0, capacity: 0 }])}
           >
             + 과정 추가
           </button>
@@ -432,6 +435,46 @@ export default function ContentEditor({ initial, loadedAt }: { initial: SiteCont
             + 강사 추가
           </button>
         )}
+      </Section>
+
+      <Section title="교습비 안내 (교습비 등 게시표)">
+        <p className="-mt-2 text-sm text-muted">교육청에 등록한 값 그대로 적어 주세요. 수업 안내 아래 표로 보여요.</p>
+        {c.tuition.rows.map((t, i) => (
+          <div key={i} className="grid gap-3 border-t border-line pt-4 first:border-t-0 first:pt-0 md:grid-cols-[2fr_1fr_1fr_1fr_auto]">
+            <Field label="교습과목">
+              <input className={inputCls} value={t.subject} onChange={(e) => set("tuition", { ...c.tuition, rows: c.tuition.rows.map((x, j) => (j === i ? { ...x, subject: e.target.value } : x)) })} />
+            </Field>
+            <Field label="횟수">
+              <input className={inputCls} value={t.schedule} onChange={(e) => set("tuition", { ...c.tuition, rows: c.tuition.rows.map((x, j) => (j === i ? { ...x, schedule: e.target.value } : x)) })} />
+            </Field>
+            <Field label="총 교습시간">
+              <input className={inputCls} value={t.minutes} onChange={(e) => set("tuition", { ...c.tuition, rows: c.tuition.rows.map((x, j) => (j === i ? { ...x, minutes: e.target.value } : x)) })} />
+            </Field>
+            <Field label="교습비">
+              <input className={inputCls} value={t.fee} onChange={(e) => set("tuition", { ...c.tuition, rows: c.tuition.rows.map((x, j) => (j === i ? { ...x, fee: e.target.value } : x)) })} />
+            </Field>
+            <button type="button" className="self-end rounded border border-line px-3 py-2 text-sm" onClick={() => set("tuition", { ...c.tuition, rows: c.tuition.rows.filter((_, j) => j !== i) })}>
+              빼기
+            </button>
+          </div>
+        ))}
+        {c.tuition.rows.length < 10 && (
+          <button
+            type="button"
+            className="self-start rounded border border-dashed border-ink px-4 py-2 text-sm"
+            onClick={() => set("tuition", { ...c.tuition, rows: [...c.tuition.rows, { subject: "", schedule: "", minutes: "", fee: "" }] })}
+          >
+            + 줄 추가
+          </button>
+        )}
+        <div className="grid gap-3 md:grid-cols-[1fr_3fr]">
+          <Field label="적용일자">
+            <input className={inputCls} value={c.tuition.appliedFrom} onChange={(e) => set("tuition", { ...c.tuition, appliedFrom: e.target.value })} />
+          </Field>
+          <Field label="안내 문구">
+            <input className={inputCls} value={c.tuition.note} onChange={(e) => set("tuition", { ...c.tuition, note: e.target.value })} />
+          </Field>
+        </div>
       </Section>
 
       <Section title="성적 향상 사례">

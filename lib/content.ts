@@ -96,6 +96,7 @@ export function sanitizeContent(raw: unknown): SiteContent {
       body: str(x.body, "", MAX.long),
       point: str(x.point, "", 40),
       schedule: str(x.schedule, "", MAX.short),
+      fee: str(x.fee, "", 40),
       enrolled: count(x.enrolled),
       capacity: count(x.capacity),
     })),
@@ -114,6 +115,19 @@ export function sanitizeContent(raw: unknown): SiteContent {
       note: str(x.note, "", MAX.mid),
       link: httpUrl(x.link),
     })),
+    tuition: (() => {
+      const t = (r.tuition && typeof r.tuition === "object" ? r.tuition : {}) as Record<string, unknown>;
+      return {
+        rows: list(t.rows, 10, d.tuition.rows, (x) => ({
+          subject: str(x.subject, "", MAX.short),
+          schedule: str(x.schedule, "", 30),
+          minutes: str(x.minutes, "", 30),
+          fee: str(x.fee, "", 30),
+        })),
+        appliedFrom: str(t.appliedFrom, d.tuition.appliedFrom, 30),
+        note: str(t.note, d.tuition.note, MAX.mid),
+      };
+    })(),
     reviews: list(r.reviews, LIMITS.reviews, d.reviews, (x) => ({ quote: str(x.quote, "", MAX.long), who: str(x.who, "", MAX.short) })),
   };
 }

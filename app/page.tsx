@@ -233,6 +233,12 @@ export default async function Home() {
                   </p>
                 )}
                 <p className="flex-1 text-sm leading-[1.7] text-muted md:text-base">{p.body}</p>
+                {p.fee && (
+                  <p className="flex items-baseline justify-between gap-3 text-sm text-muted md:text-[15px]">
+                    교습비
+                    <span className="font-serif text-xl font-black text-ink md:text-2xl">{p.fee}</span>
+                  </p>
+                )}
                 <div className="flex items-center justify-between border-t border-line pt-3 text-sm text-muted md:pt-4 md:text-[15px]">
                   <span>{p.schedule}</span>
                   <a href="#consult" className="py-3 font-semibold text-ink hover:text-brand md:py-0">
@@ -242,6 +248,40 @@ export default async function Home() {
               </Reveal>
             ))}
           </div>
+          {site.tuition.rows.length > 0 && (
+            <Reveal className="flex flex-col gap-3 rounded-lg border border-line bg-white p-5 md:p-8">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="text-lg font-semibold md:text-xl">교습비 안내</h3>
+                <p className="text-xs text-muted md:text-sm">
+                  교육청 등록번호 {site.business.academyNo}
+                  {site.tuition.appliedFrom && <> · 적용일 {site.tuition.appliedFrom}</>}
+                </p>
+              </div>
+              <div className="-mx-1">
+                <table className="w-full text-left text-[13px] md:text-[15px]">
+                  <thead>
+                    <tr className="border-b border-ink text-muted">
+                      <th className="px-1 py-2 font-semibold">교습과목</th>
+                      <th className="whitespace-nowrap px-1 py-2 font-semibold">횟수</th>
+                      <th className="whitespace-nowrap px-1 py-2 text-right font-semibold">총 교습시간</th>
+                      <th className="px-1 py-2 text-right font-semibold">교습비</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {site.tuition.rows.map((t, i) => (
+                      <tr key={i} className="border-b border-line last:border-b-0">
+                        <td className="px-1 py-3">{t.subject}</td>
+                        <td className="px-1 py-3">{t.schedule}</td>
+                        <td className="px-1 py-3 text-right">{t.minutes}</td>
+                        <td className="whitespace-nowrap px-1 py-3 text-right font-semibold text-brand">{t.fee}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {site.tuition.note && <p className="text-xs leading-[1.7] text-muted md:text-sm">· {site.tuition.note}</p>}
+            </Reveal>
+          )}
         </section>
 
         {/* MEDICCHART — 학습 관리 시스템 홍보 */}
