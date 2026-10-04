@@ -85,7 +85,7 @@ export default async function Home() {
               url: "https://www.medicmath.com",
               logo: "https://www.medicmath.com/logo.png",
               image: "https://www.medicmath.com/logo.png",
-              description: "결심한 학생만 받습니다. 제주시 중·고등 수학 전문 학원.",
+              description: "결심한 학생과 함께합니다. 제주시 중·고등 수학 전문 학원.",
               telephone: site.phone || undefined,
               address: {
                 "@type": "PostalAddress",
@@ -119,15 +119,15 @@ export default async function Home() {
               </p>
               <h1 className="font-serif text-[44px] font-black leading-[1.22] tracking-[-1px] md:text-[76px] md:leading-[1.2] md:tracking-[-2px]">
                 <span className="hero-rise block" style={{ animationDelay: "120ms" }}>
-                  결심한 학생만
+                  결심한 학생과
                 </span>
                 <span className="hero-rise block" style={{ animationDelay: "260ms" }}>
-                  받습니다.
+                  함께합니다.
                 </span>
               </h1>
               <p className="hero-rise max-w-[600px] text-base leading-[1.75] text-soft md:text-xl" style={{ animationDelay: "420ms" }}>
                 메딕수학은 성적을 올리고 <span className="text-[#8E857A] line-through">싶은</span> 학생이 아니라,
-                <br className="hidden md:inline" /> 성적을 올리기로 <b className="font-semibold text-white">결심한</b> 학생을 가르칩니다.
+                <br className="hidden md:inline" /> 성적을 올리기로 <b className="font-semibold text-white">결심한</b> 학생과 함께합니다.
               </p>
               <PhotoSlideshow photos={site.heroPhotos} className="hero-rise h-[240px] rounded-md md:h-[380px] lg:hidden" />
               <div className="hero-rise flex flex-col gap-2.5 md:mt-2 md:flex-row md:gap-3" style={{ animationDelay: "560ms" }}>
@@ -463,7 +463,7 @@ export default async function Home() {
               </h2>
             </div>
             <p className="text-[15px] leading-[1.7] text-muted md:max-w-[440px] md:text-[17px]">
-              편하게 다니는 학원이 아닙니다. 대신, 끝까지 따라온 학생은 반드시 결과로 보답받습니다.
+              쉽지만은 않은 약속들입니다. 대신, 끝까지 함께한 학생은 결과로 보답받습니다.
             </p>
           </Reveal>
           <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-8">
@@ -525,10 +525,10 @@ export default async function Home() {
             <Reveal className="flex flex-col gap-2.5 lg:w-[440px] lg:shrink-0 md:gap-[22px]">
               <p className="eyebrow">ADMISSION</p>
               <h2 className="section-title">
-                아무나<br className="hidden md:inline" /> 받지 않습니다
+                실력보다<br className="hidden md:inline" /> 의지를 봅니다
               </h2>
               <p className="text-[15px] leading-[1.7] text-muted md:text-[17px] md:leading-[1.75]">
-                실력보다 의지를 봅니다. 지금 점수가 낮아도 괜찮습니다. 공부할 각오가 되어 있는지, 그것만 확인합니다.
+                지금 점수가 낮아도 괜찮습니다. 공부할 각오가 되어 있는지, 그것을 함께 확인하는 것에서 시작합니다.
               </p>
             </Reveal>
             <ol className="grid flex-1 grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-5">

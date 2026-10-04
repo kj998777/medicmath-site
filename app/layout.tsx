@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "메딕수학 | 제주시 중·고등 수학 전문 학원",
   description:
-    "결심한 학생만 받습니다. 제주시 중앙로 메딕수학 — 제주 학교 기출을 직접 분석하는 메딕차트로 내신·수능을 준비하는 중·고등 수학 전문 학원입니다.",
+    "결심한 학생과 함께합니다. 제주시 중앙로 메딕수학 — 제주 학교 기출을 직접 분석하는 메딕차트로 내신·수능을 준비하는 중·고등 수학 전문 학원입니다.",
   keywords: ["제주시 수학학원", "제주 수학학원", "제주 고등수학", "제주 중등수학", "제주 내신 수학", "메딕수학", "메딕차트", "이도동 수학학원"],
   verification: {
     ...(GOOGLE_SITE_VERIFICATION ? { google: GOOGLE_SITE_VERIFICATION } : {}),
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: "/" },
   openGraph: {
-    title: "메딕수학 | 결심한 학생만 받습니다",
+    title: "메딕수학 | 결심한 학생과 함께합니다",
     description: "제주시 중앙로 312 · 중·고등 수학 전문 학원",
     images: ["/logo.png"],
     locale: "ko_KR",
