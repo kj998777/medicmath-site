@@ -74,7 +74,7 @@ export const defaultContent: SiteContent = {
   privacyRetention: "[보관 기간]",
   business: { owner: "이진", bizNo: "538-97-02143", academyNo: "제2979호" },
   // 2026-10-01: 원장님 네이버 블로그(메딕차트 홍보 배너와 같은 주소). DB 값이 있으면 그 값을 쓴다.
-  links: { blog: "https://blog.naver.com/yijean", instagram: "", kakao: "" },
+  links: { blog: "https://blog.naver.com/yijean", instagram: "https://www.instagram.com/medic_math/", kakao: "" },
   rules: [
     { title: "과제는 예외 없이", body: "과제는 양보다 '끝까지'가 기준입니다. 해 오지 못한 과제는 학원에 남아 끝내고 귀가하며, 풀이 과정 없이 답만 적은 과제는 한 것으로 보지 않습니다." },
     { title: "틀린 문제는 그날 끝낸다", body: "틀린 문제는 해설을 읽는 것으로 끝내지 않습니다. 해설을 덮고 다시 풀어 맞힐 때까지가 그날의 수업이고, 반복해서 틀리는 단원은 메딕차트로 따로 모아 관리합니다." },

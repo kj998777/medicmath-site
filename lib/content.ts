@@ -96,7 +96,7 @@ export function sanitizeContent(raw: unknown): SiteContent {
       bizNo: str(biz.bizNo, d.business.bizNo, MAX.short),
       academyNo: str(biz.academyNo, d.business.academyNo, MAX.short),
     },
-    links: { blog: httpUrl(links.blog), instagram: httpUrl(links.instagram), kakao: httpUrl(links.kakao) },
+    links: { blog: httpUrl(links.blog), instagram: httpUrl(links.instagram) || d.links.instagram, kakao: httpUrl(links.kakao) },
     rules: list(r.rules, LIMITS.rules, d.rules, (x) => ({ title: str(x.title, "", MAX.short), body: str(x.body, "", MAX.long) })),
     steps: list(r.steps, LIMITS.steps, d.steps, (x) => ({ title: str(x.title, "", MAX.short), body: str(x.body, "", MAX.mid) })),
     programs: list(r.programs, LIMITS.programs, d.programs, (x) => ({
