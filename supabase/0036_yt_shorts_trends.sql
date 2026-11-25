@@ -182,12 +182,16 @@ vv as (
 ch as (
   select lower(regexp_replace(m[1], '\s+', '', 'g')) || '챌린지' as term, id, views
   from vv, regexp_matches(txt, '#?([0-9A-Za-z가-힣]{1,15})\s?챌린지', 'g') m
-  where m[1] !~ '^(the|a|my|오늘|이번|요즘|유행|틱톡|릴스|쇼츠|숏츠|인기|최신|댄스)$'
+  where m[1] !~ '^(the|a|my|오늘|이번|요즘|유행|틱톡|릴스|쇼츠|숏츠|숏폼|인기|최신|댄스|노래|다양한|새로운|재밌는|재미있는|웃긴|신기한|진로|진로리더|h진로리더|챌린지)$'
+    and (m[1] ~ '[가-힣]{2,}' or m[1] ~ '[A-Za-z]{3,}')
 ),
-ch_agg as (
-  select term, count(distinct id) as videos, sum(views) as views,
+ch_all as (
+  select c.term, count(distinct c.id) as videos, sum(c.views) as views, sum(vv.views_per_day) as views_per_day,
          (select 'https://www.youtube.com/shorts/' || c2.id from ch c2 where c2.term = c.term order by c2.views desc limit 1) as top_url
-  from ch c group by term having count(distinct id) >= 2
+  from ch c join vv using (id) group by c.term having count(distinct c.id) >= 2
+),
+ch_agg as (  -- 같은 영상 묶음에서 나온 비슷한 이름(진로리더/진로)은 하나만
+  select distinct on (top_url) * from ch_all order by top_url, views desc, videos desc, length(term)
 ),
 ig as (
   select a.term, count(distinct m.username) as ig_accounts
@@ -199,12 +203,12 @@ ig as (
 songs as (
   select btrim(m[1]) as song, id, views
   from vv, regexp_matches(coalesce(description, '') || E'\n' || coalesce(title, ''),
-        '(?:🎵|🎶|♪|♬|[Bb][Gg][Mm]|[Ss]ong|[Mm]usic|노래|음악|음원)\s*[:：\-]?\s*([^\n#|@]{2,40})', 'g') m
+        '(?:(?:🎵|🎶|♪|♬)\s*[:：\-]?|(?:[Bb][Gg][Mm]|[Ss]ong|[Mm]usic|노래|음악|음원|곡)\s*[:：\-])\s*([^\n#|@]{2,40})', 'g') m
 ),
 song_agg as (
   select song, count(distinct id) as videos, sum(views) as views,
          (select 'https://www.youtube.com/shorts/' || s2.id from songs s2 where s2.song = s.song order by s2.views desc limit 1) as top_url
-  from songs s where length(song) >= 2 group by song having count(distinct id) >= 2
+  from songs s where length(song) >= 2 and song !~ '^(추천|챌린지|모음|출처|원곡|있음|없음)' group by song having count(distinct id) >= 2
 )
 select jsonb_build_object(
   'generated_at', now(),
@@ -214,10 +218,10 @@ select jsonb_build_object(
   'fast_shorts', coalesce((select jsonb_agg(x) from (
       select title, channel_title as channel, views, views_per_day, recent_per_day, published_at::date as day,
              'https://www.youtube.com/shorts/' || id as url
-      from vv order by coalesce(recent_per_day, views_per_day) desc limit 25) x), '[]'),
+      from vv where title ~ '[가-힣]' order by coalesce(recent_per_day, views_per_day) desc limit 25) x), '[]'),
   'challenges', coalesce((select jsonb_agg(x) from (
-      select a.term, a.videos, a.views, coalesce(ig.ig_accounts, 0) as ig_accounts, a.top_url
-      from ch_agg a left join ig using (term) order by a.videos desc, a.views desc limit 20) x), '[]'),
+      select a.term, a.videos, a.views, a.views_per_day, coalesce(ig.ig_accounts, 0) as ig_accounts, a.top_url
+      from ch_agg a left join ig using (term) order by a.videos desc, a.views_per_day desc limit 20) x), '[]'),
   'songs', coalesce((select jsonb_agg(x) from (
       select song, videos, views, top_url from song_agg order by videos desc, views desc limit 20) x), '[]')
 );
